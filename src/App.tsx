@@ -5,6 +5,8 @@ import { db, auth } from "./config/firebase";
 import { useEffect, useState } from "react";
 import BuySell from "./components/interact/BuySell";
 import Profile from "./pages/Profile";
+import List from "./pages/List";
+import MainSite from "./pages/MainSite";
 
 const style: React.CSSProperties | undefined = {
   display: "flex",
@@ -15,9 +17,7 @@ const style: React.CSSProperties | undefined = {
 function App() {
   return (
     <div style={style}>
-      <Auth />
-      <BuySell />
-      <Profile />
+      <MainSite />
     </div>
   );
 }

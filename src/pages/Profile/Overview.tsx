@@ -22,7 +22,7 @@ interface Props {
 const Overview = ({ transactions }: Props) => {
   const user = auth.currentUser?.uid;
 
-  return <div style={containerStyle}></div>;
+  return <div style={containerStyle}>Overview</div>;
 };
 
 export default Overview;

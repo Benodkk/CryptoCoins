@@ -24,6 +24,7 @@ const TransactionHistory = ({ transactions }: Props) => {
 
   return (
     <div style={containerStyle}>
+      <div>Transaction history</div>
       {transactions.map((transaction) => {
         return (
           <div style={elementStyle}>
