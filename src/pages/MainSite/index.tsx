@@ -1,12 +1,13 @@
+import { StyledMainContainer } from "./mainSite.styled";
 import MarketUpdate from "./MarketUpdate";
 import TrandingCoins from "./TrandingCoins";
 
 const MainSite = () => {
   return (
-    <div>
+    <StyledMainContainer>
       <TrandingCoins />
       <MarketUpdate />
-    </div>
+    </StyledMainContainer>
   );
 };
 

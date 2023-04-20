@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import CoinInfoModal from "../../components/CoinInfoModal";
 import TransactionModal from "../../components/TransactionModal";
+import {
+  StyledMarketList,
+  StyledMarketUpdateSection,
+  StyledOneCoin,
+} from "./mainSite.styled";
 
 const containerStyle: React.CSSProperties | undefined = {
   display: "flex",
@@ -42,29 +47,33 @@ const MarketUpdate = () => {
     };
     fetchData();
   }, []);
+
   return (
-    <div style={containerStyle}>
-      <div>List</div>
-      {coins ? (
-        coins.map((coin) => {
-          return (
-            <div style={elementStyle}>
-              <div>{coins.indexOf(coin) + 1}</div>
-              <img style={{ width: "50px" }} src={coin.image} />
-              <div onClick={() => setShowDetails(coin.id)}>{coin.name}</div>
-              <div>{coin.symbol}</div>
-              <div>{coin.current_price}</div>
-              <div>{coin.price_change_percentage_24h}</div>
-              <div>{coin.market_cap}</div>
-              <button onClick={() => setAddTransaction(coin.id)}>
-                Add transaction
-              </button>
-            </div>
-          );
-        })
-      ) : (
-        <></>
-      )}
+    <StyledMarketUpdateSection>
+      <h2>List</h2>
+      <StyledMarketList>
+        {coins ? (
+          coins.map((coin) => {
+            return (
+              <StyledOneCoin key={coin.id}>
+                <div>{coins.indexOf(coin) + 1}</div>
+                <img style={{ width: "50px" }} src={coin.image} />
+                <div onClick={() => setShowDetails(coin.id)}>{coin.name}</div>
+                <div>{coin.symbol}</div>
+                <div>{coin.current_price}</div>
+                <div>{coin.price_change_percentage_24h}</div>
+                <div>{coin.market_cap}</div>
+                <button onClick={() => setAddTransaction(coin.id)}>
+                  Add transaction
+                </button>
+              </StyledOneCoin>
+            );
+          })
+        ) : (
+          <></>
+        )}
+      </StyledMarketList>
+
       {showDetails && (
         <CoinInfoModal coinId={showDetails} setShowDetails={setShowDetails} />
       )}
@@ -75,7 +84,7 @@ const MarketUpdate = () => {
         />
       )}
       <button>Check whole list</button>
-    </div>
+    </StyledMarketUpdateSection>
   );
 };
 

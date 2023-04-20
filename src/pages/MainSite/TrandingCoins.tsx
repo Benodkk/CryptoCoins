@@ -1,15 +1,9 @@
 import { useState, useEffect } from "react";
-
-const containerStyle: React.CSSProperties | undefined = {
-  display: "flex",
-  flexDirection: "column",
-  gap: "40px",
-};
-
-const elementStyle: React.CSSProperties | undefined = {
-  display: "flex",
-  gap: "40px",
-};
+import {
+  StyledOneTrandingCoin,
+  StyledTrandingCoins,
+  StyledTrandingCoinsSection,
+} from "./mainSite.styled";
 
 interface CoinDetails {
   item: {
@@ -31,29 +25,31 @@ const TrandingCoins = () => {
       try {
         const response = await fetch(url);
         const fetchedData = await response.json();
-        setCoins(fetchedData.coins);
+        setCoins(fetchedData.coins.slice(0, 6));
       } catch (err) {}
     };
     fetchData();
   }, []);
+
   return (
-    <div style={containerStyle}>
-      <div>Trending Coins</div>
-      {coins ? (
-        coins.map((coin) => {
-          return (
-            <div style={elementStyle}>
-              <img src={coin.item.small} />
-              <div>{coin.item.symbol}</div>
-              <div>{coin.item.name}</div>
-              <div>{coin.item.market_cap_rank}</div>
-            </div>
-          );
-        })
-      ) : (
-        <></>
-      )}
-    </div>
+    <StyledTrandingCoinsSection>
+      <h2>Trending Coins</h2>
+      <StyledTrandingCoins>
+        {coins ? (
+          coins.map((coin) => {
+            return (
+              <StyledOneTrandingCoin>
+                <img src={coin.item.small} />
+                <div>{coin.item.symbol}</div>
+                <div>#Rank: {coin.item.market_cap_rank}</div>
+              </StyledOneTrandingCoin>
+            );
+          })
+        ) : (
+          <></>
+        )}
+      </StyledTrandingCoins>
+    </StyledTrandingCoinsSection>
   );
 };
 
