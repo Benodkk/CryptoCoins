@@ -3,7 +3,7 @@ import {
   StyledOneTrandingCoin,
   StyledTrandingCoins,
   StyledTrandingCoinsSection,
-} from "./mainSite.styled";
+} from "./MainSite.styled";
 
 interface CoinDetails {
   item: {

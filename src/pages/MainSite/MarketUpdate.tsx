@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import CoinInfoModal from "../../components/CoinInfoModal";
 import TransactionModal from "../../components/TransactionModal";
 import {
+  StyledChangeDiv,
   StyledImgWithName,
   StyledListHeader,
   StyledMarketList,
@@ -9,7 +9,8 @@ import {
   StyledOneCoin,
   StyledSymbol,
   StyledToRightDiv,
-} from "./mainSite.styled";
+  StyledTransactionButton,
+} from "./MainSite.styled";
 
 interface CoinDetails {
   id: string;
@@ -23,7 +24,6 @@ interface CoinDetails {
 
 const MarketUpdate = () => {
   const [coins, setCoins] = useState<CoinDetails[]>();
-  const [showDetails, setShowDetails] = useState<string | null>(null);
   const [addTransaction, setAddTransaction] = useState<string | null>(null);
   const url =
     "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=7&page=1&sparkline=false&locale=en";
@@ -45,17 +45,14 @@ const MarketUpdate = () => {
   return (
     <StyledMarketUpdateSection>
       <h2>List</h2>
-
       <StyledMarketList>
         <StyledListHeader>
           <div>#</div>
           <StyledImgWithName>Coin</StyledImgWithName>
-
           <StyledToRightDiv>Price</StyledToRightDiv>
           <div>24h change</div>
           <StyledToRightDiv>Market Cap</StyledToRightDiv>
         </StyledListHeader>
-
         {coins ? (
           coins.map((coin) => {
             return (
@@ -63,24 +60,27 @@ const MarketUpdate = () => {
                 <div>{coins.indexOf(coin) + 1}</div>
                 <StyledImgWithName>
                   <img src={coin.image} />
-                  <div onClick={() => setShowDetails(coin.id)}>{coin.name}</div>
+                  <div>{coin.name}</div>
                   <StyledSymbol>{coin.symbol}</StyledSymbol>
                 </StyledImgWithName>
-
                 <StyledToRightDiv>
                   ${coin.current_price.toLocaleString("en-US")}
                 </StyledToRightDiv>
-                <div>
-                  {(coin.price_change_percentage_24h < 0 ? "" : "+") +
+                <StyledChangeDiv
+                  positive={coin.price_change_percentage_24h > 0}
+                >
+                  {(coin.price_change_percentage_24h > 0 ? "+" : "") +
                     coin.price_change_percentage_24h.toFixed(2)}
                   %
-                </div>
+                </StyledChangeDiv>
                 <StyledToRightDiv>
                   ${coin.market_cap.toLocaleString("en-US")}
                 </StyledToRightDiv>
-                <button onClick={() => setAddTransaction(coin.id)}>
+                <StyledTransactionButton
+                  onClick={() => setAddTransaction(coin.id)}
+                >
                   Add transaction
-                </button>
+                </StyledTransactionButton>
               </StyledOneCoin>
             );
           })
@@ -88,17 +88,15 @@ const MarketUpdate = () => {
           <></>
         )}
       </StyledMarketList>
-
-      {showDetails && (
-        <CoinInfoModal coinId={showDetails} setShowDetails={setShowDetails} />
-      )}
       {addTransaction && (
         <TransactionModal
           coinId={addTransaction}
           setAddTransaction={setAddTransaction}
         />
       )}
-      <button>Check whole list</button>
+      <button onClick={() => setAddTransaction("bitcoin")}>
+        Check whole list
+      </button>
     </StyledMarketUpdateSection>
   );
 };

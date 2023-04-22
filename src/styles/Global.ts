@@ -15,7 +15,9 @@ html{
   }
 }
 body{
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: "Titillium Web", sans-serif;
+    font-weight: 600;
+    /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
     font-size: 2rem;
     line-height: 1;
     background-color: rgb(0,6,68);

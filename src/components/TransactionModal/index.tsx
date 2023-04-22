@@ -3,6 +3,21 @@ import { useState, useEffect } from "react";
 import { addDoc, collection } from "firebase/firestore";
 import { db, auth } from "../../config/firebase";
 
+import close from "../../assets/close.png";
+
+import {
+  CloseButton,
+  StyledActionButton,
+  StyledActionCol,
+  StyledActionRow,
+  StyledButtonsCol,
+  StyledInput,
+  StyledLogoRow,
+  StyledModal,
+  StyledModalContainer,
+  StyledModalHeadRow,
+} from "./TransactionModal.styled";
+
 interface Props {
   coinId: string;
   setAddTransaction: React.Dispatch<React.SetStateAction<string | null>>;
@@ -66,39 +81,51 @@ const TransactionModal = ({ coinId, setAddTransaction }: Props) => {
   };
 
   return (
-    <div>
+    <StyledModalContainer>
       {coin ? (
-        <div>
-          <div onClick={() => setAddTransaction(null)}>CLOSE X</div>
-          <div>Add transaction</div>
-
-          <div>
-            <div>{coin.symbol}</div>
-          </div>
-
-          <label>Amount:</label>
-          <input
-            type="number"
-            onChange={(e) => setAmount(Number(e.target.value))}
-          />
-          <label>Price:</label>
-          <input
-            defaultValue={coin.market_data.current_price.usd}
-            type="number"
-            onChange={(e) => setPrice(Number(e.target.value))}
-          />
-          <input
-            type="date"
-            defaultValue={new Date().toISOString().slice(0, 10)}
-            onChange={(e) => setDate(e.target.value)}
-          />
-          <button onClick={() => addCoin(coinId, "buy")}>BUY!</button>
-          <button onClick={() => addCoin(coinId, "sell")}>SELL!</button>
-        </div>
+        <StyledModal>
+          <StyledModalHeadRow>
+            <div>Add transaction</div>
+            <CloseButton onClick={() => setAddTransaction(null)} src={close} />
+          </StyledModalHeadRow>
+          <StyledLogoRow>
+            <div>{coin.symbol.toUpperCase()}</div>
+            <img src={coin.image.large} />
+          </StyledLogoRow>
+          <StyledActionRow>
+            <StyledActionCol>
+              <label>Amount:</label>
+              <StyledInput
+                type="number"
+                onChange={(e) => setAmount(Number(e.target.value))}
+              />
+              <label>Price:</label>
+              <StyledInput
+                defaultValue={coin.market_data.current_price.usd}
+                type="number"
+                onChange={(e) => setPrice(Number(e.target.value))}
+              />
+              <label>Date:</label>
+              <StyledInput
+                type="date"
+                defaultValue={new Date().toISOString().slice(0, 10)}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </StyledActionCol>
+            <StyledButtonsCol>
+              <StyledActionButton onClick={() => addCoin(coinId, "buy")}>
+                BUY!
+              </StyledActionButton>
+              <StyledActionButton onClick={() => addCoin(coinId, "sell")}>
+                SELL!
+              </StyledActionButton>
+            </StyledButtonsCol>
+          </StyledActionRow>
+        </StyledModal>
       ) : (
         <></>
       )}
-    </div>
+    </StyledModalContainer>
   );
 };
 

@@ -1,9 +1,25 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const StyledMainContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+// Welcome Page
+
+export const StyledWelcomePageSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 1024px;
+  margin-top: 60px;
+  height: 50vh;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+`;
+
+export const StyledWelcomeSign = styled.div`
+  font-size: 60px;
 `;
 
 // Trading Coins
@@ -82,7 +98,7 @@ export const StyledImgWithName = styled.div`
   align-items: center;
   justify-self: start;
   gap: 10px;
-  cursor: pointer;
+  width: 100%;
   img {
     width: 40px;
   }
@@ -92,6 +108,31 @@ export const StyledSymbol = styled.div`
   font-weight: 500;
 `;
 
+interface StyledChangeDivProps {
+  positive: boolean;
+}
+
+export const StyledChangeDiv = styled.div<StyledChangeDivProps>`
+  color: ${({ positive }) => (positive ? "green" : "red")};
+`;
+
 export const StyledToRightDiv = styled.div`
   justify-self: end;
+`;
+
+export const StyledTransactionButton = styled.button`
+  background-color: #ffffff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+  &:hover {
+    background-color: ${(props) => props.theme.colors.interaction};
+  }
+  &:active {
+    background-color: ${(props) => props.theme.colors.interaction};
+    transform: scale(0.9);
+  }
 `;

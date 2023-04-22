@@ -1,12 +1,16 @@
-import { StyledMainContainer } from "./mainSite.styled";
+import Header from "../../components/Header";
+import { StyledMainContainer } from "./MainSite.styled";
 import MarketUpdate from "./MarketUpdate";
 import TrandingCoins from "./TrandingCoins";
+import WelcomePage from "./WelcomePage";
 
 const MainSite = () => {
   return (
     <StyledMainContainer>
-      <TrandingCoins />
-      <MarketUpdate />
+      <Header />
+      <WelcomePage />
+      {/* <TrandingCoins />
+      <MarketUpdate /> */}
     </StyledMainContainer>
   );
 };
