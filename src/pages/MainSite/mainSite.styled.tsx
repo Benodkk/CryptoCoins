@@ -48,14 +48,50 @@ export const StyledMarketList = styled.div`
   width: 1024px;
 `;
 
+export const StyledListHeader = styled.div`
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  width: 1024px;
+  grid-template-columns: 0.5fr 3fr 1fr 1fr 1.5fr 1fr;
+  gap: 20px;
+  padding: 20px 0;
+  font-weight: 700;
+`;
+
 export const StyledOneCoin = styled.div`
   display: grid;
   align-items: center;
-  grid-template-columns: repeat(8, 1fr);
+  justify-items: center;
+  width: 1024px;
+  grid-template-columns: 0.5fr 3fr 1fr 1fr 1.5fr 1fr;
   gap: 20px;
   padding: 10px 0;
   font-weight: 700;
+  border-top: 1px solid white;
   &:hover {
     background-color: rgb(4, 7, 46);
   }
+  img {
+    width: 40px;
+  }
+`;
+
+export const StyledImgWithName = styled.div`
+  display: flex;
+  align-items: center;
+  justify-self: start;
+  gap: 10px;
+  cursor: pointer;
+  img {
+    width: 40px;
+  }
+`;
+
+export const StyledSymbol = styled.div`
+  font-weight: 500;
+`;
+
+export const StyledToRightDiv = styled.div`
+  justify-self: end;
 `;

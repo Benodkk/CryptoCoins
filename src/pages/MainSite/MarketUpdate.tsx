@@ -2,21 +2,14 @@ import { useState, useEffect } from "react";
 import CoinInfoModal from "../../components/CoinInfoModal";
 import TransactionModal from "../../components/TransactionModal";
 import {
+  StyledImgWithName,
+  StyledListHeader,
   StyledMarketList,
   StyledMarketUpdateSection,
   StyledOneCoin,
+  StyledSymbol,
+  StyledToRightDiv,
 } from "./mainSite.styled";
-
-const containerStyle: React.CSSProperties | undefined = {
-  display: "flex",
-  flexDirection: "column",
-  gap: "40px",
-};
-
-const elementStyle: React.CSSProperties | undefined = {
-  display: "flex",
-  gap: "40px",
-};
 
 interface CoinDetails {
   id: string;
@@ -41,6 +34,7 @@ const MarketUpdate = () => {
         const response = await fetch(url);
         const fetchedData = await response.json();
         setCoins(fetchedData);
+        console.log(fetchedData);
       } catch (err) {
         console.error(err);
       }
@@ -51,18 +45,39 @@ const MarketUpdate = () => {
   return (
     <StyledMarketUpdateSection>
       <h2>List</h2>
+
       <StyledMarketList>
+        <StyledListHeader>
+          <div>#</div>
+          <StyledImgWithName>Coin</StyledImgWithName>
+
+          <StyledToRightDiv>Price</StyledToRightDiv>
+          <div>24h change</div>
+          <StyledToRightDiv>Market Cap</StyledToRightDiv>
+        </StyledListHeader>
+
         {coins ? (
           coins.map((coin) => {
             return (
               <StyledOneCoin key={coin.id}>
                 <div>{coins.indexOf(coin) + 1}</div>
-                <img style={{ width: "50px" }} src={coin.image} />
-                <div onClick={() => setShowDetails(coin.id)}>{coin.name}</div>
-                <div>{coin.symbol}</div>
-                <div>{coin.current_price}</div>
-                <div>{coin.price_change_percentage_24h}</div>
-                <div>{coin.market_cap}</div>
+                <StyledImgWithName>
+                  <img src={coin.image} />
+                  <div onClick={() => setShowDetails(coin.id)}>{coin.name}</div>
+                  <StyledSymbol>{coin.symbol}</StyledSymbol>
+                </StyledImgWithName>
+
+                <StyledToRightDiv>
+                  ${coin.current_price.toLocaleString("en-US")}
+                </StyledToRightDiv>
+                <div>
+                  {(coin.price_change_percentage_24h < 0 ? "" : "+") +
+                    coin.price_change_percentage_24h.toFixed(2)}
+                  %
+                </div>
+                <StyledToRightDiv>
+                  ${coin.market_cap.toLocaleString("en-US")}
+                </StyledToRightDiv>
                 <button onClick={() => setAddTransaction(coin.id)}>
                   Add transaction
                 </button>
