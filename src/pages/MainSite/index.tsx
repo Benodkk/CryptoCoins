@@ -9,8 +9,8 @@ const MainSite = () => {
     <StyledMainContainer>
       <Header />
       <WelcomePage />
-      {/* <TrandingCoins />
-      <MarketUpdate /> */}
+      <TrandingCoins />
+      <MarketUpdate />
     </StyledMainContainer>
   );
 };

@@ -4,22 +4,49 @@ export const StyledMainContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 40px;
 `;
+
+export const StyledSectionName = styled.h2`
+  font-size: 40px;
+  padding: 30px 0;
+`;
+
 // Welcome Page
 
 export const StyledWelcomePageSection = styled.section`
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 1024px;
-  margin-top: 60px;
+  justify-content: space-around;
+  width: 100%;
+  padding: 50px 25vw 0;
   height: 50vh;
-  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+  text-shadow: 1px 1px 2px rgba(48, 45, 45, 0.5);
+  font-weight: 700;
+  background: linear-gradient(rgb(49, 43, 182), rgb(0, 6, 68));
 `;
 
-export const StyledWelcomeSign = styled.div`
+export const StyledWelcomeSign = styled.h2`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font-size: 60px;
+`;
+
+const bounce = keyframes`
+0%{
+  transform: translateY(0) ;
+}
+40%{
+  transform: translateY(-20px);
+}
+100%{
+  transform: translateY(0);
+}`;
+
+export const StyledCoinImg = styled.img`
+  width: 100px;
+  animation: ${bounce} 2s ease-in-out infinite;
 `;
 
 // Trading Coins
@@ -29,6 +56,7 @@ export const StyledTrandingCoinsSection = styled.section`
   flex-direction: column;
   align-items: center;
   width: 1024px;
+  min-height: 50vh;
 `;
 
 export const StyledTrandingCoins = styled.div`
@@ -57,77 +85,16 @@ export const StyledMarketUpdateSection = styled.section`
   align-items: center;
 `;
 
-export const StyledMarketList = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 1024px;
-`;
-
-export const StyledListHeader = styled.div`
-  display: grid;
-  align-items: center;
-  justify-items: center;
-  width: 1024px;
-  grid-template-columns: 0.5fr 3fr 1fr 1fr 1.5fr 1fr;
-  gap: 20px;
-  padding: 20px 0;
-  font-weight: 700;
-`;
-
-export const StyledOneCoin = styled.div`
-  display: grid;
-  align-items: center;
-  justify-items: center;
-  width: 1024px;
-  grid-template-columns: 0.5fr 3fr 1fr 1fr 1.5fr 1fr;
-  gap: 20px;
-  padding: 10px 0;
-  font-weight: 700;
-  border-top: 1px solid white;
-  &:hover {
-    background-color: rgb(4, 7, 46);
-  }
-  img {
-    width: 40px;
-  }
-`;
-
-export const StyledImgWithName = styled.div`
-  display: flex;
-  align-items: center;
-  justify-self: start;
-  gap: 10px;
-  width: 100%;
-  img {
-    width: 40px;
-  }
-`;
-
-export const StyledSymbol = styled.div`
-  font-weight: 500;
-`;
-
-interface StyledChangeDivProps {
-  positive: boolean;
-}
-
-export const StyledChangeDiv = styled.div<StyledChangeDivProps>`
-  color: ${({ positive }) => (positive ? "green" : "red")};
-`;
-
-export const StyledToRightDiv = styled.div`
-  justify-self: end;
-`;
-
-export const StyledTransactionButton = styled.button`
+export const StyledButton = styled.button`
   background-color: #ffffff;
   border: none;
   padding: 5px 10px;
+  margin-top: 20px;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
   transition: 0.2s;
+  font-size: 20px;
   &:hover {
     background-color: ${(props) => props.theme.colors.interaction};
   }

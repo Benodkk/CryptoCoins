@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { db, auth } from "../../config/firebase";
 
 import close from "../../assets/close.png";
@@ -16,33 +16,39 @@ import {
   StyledModal,
   StyledModalContainer,
   StyledModalHeadRow,
-} from "./TransactionModal.styled";
+} from "./Modals.styled";
+
+interface Transaction {
+  id: string;
+  name: string;
+  price: number;
+  amount: number;
+  coinId: string;
+  date: string;
+  type: string;
+}
 
 interface Props {
-  coinId: string;
-  setAddTransaction: React.Dispatch<React.SetStateAction<string | null>>;
+  transaction: Transaction;
+  setChangeTransaction: React.Dispatch<
+    React.SetStateAction<Transaction | null>
+  >;
 }
 
 interface Coin {
-  name: string;
   symbol: string;
-  market_data: {
-    current_price: {
-      usd: string;
-    };
-  };
   image: {
     large: string;
   };
 }
 
-const TransactionModal = ({ coinId, setAddTransaction }: Props) => {
+const ChangeModal = ({ transaction, setChangeTransaction }: Props) => {
   const [coin, setCoin] = useState<Coin>();
-  const [amount, setAmount] = useState(0);
-  const [price, setPrice] = useState(0);
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [amount, setAmount] = useState(transaction.amount);
+  const [price, setPrice] = useState(transaction.price);
+  const [date, setDate] = useState(transaction.date);
 
-  const url = `https://api.coingecko.com/api/v3/coins/${coinId}`;
+  const url = `https://api.coingecko.com/api/v3/coins/${transaction.coinId}`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,7 +56,6 @@ const TransactionModal = ({ coinId, setAddTransaction }: Props) => {
         const response = await fetch(url);
         const fetchedData = await response.json();
         setCoin(fetchedData);
-        setPrice(fetchedData.market_data.current_price.usd);
         console.log(fetchedData);
       } catch (err) {
         console.error(err);
@@ -59,17 +64,18 @@ const TransactionModal = ({ coinId, setAddTransaction }: Props) => {
     fetchData();
   }, []);
 
-  const addCoin = async (coinId: string, type: string) => {
+  const changeTransaction = async (type: string) => {
     const user = auth.currentUser?.uid;
-    const transactionsColletionRef = collection(
+    const transactionDoc = doc(
       db,
       "users",
       `${user}`,
-      "transactions"
+      "transactions",
+      transaction.id
     );
     try {
-      await addDoc(transactionsColletionRef, {
-        coinId: coinId,
+      await updateDoc(transactionDoc, {
+        coinId: transaction.coinId,
         amount: amount,
         price: price,
         date: date,
@@ -78,6 +84,7 @@ const TransactionModal = ({ coinId, setAddTransaction }: Props) => {
     } catch (err) {
       console.error(err);
     }
+    setChangeTransaction(null);
   };
 
   return (
@@ -86,7 +93,10 @@ const TransactionModal = ({ coinId, setAddTransaction }: Props) => {
         <StyledModal>
           <StyledModalHeadRow>
             <div>Add transaction</div>
-            <CloseButton onClick={() => setAddTransaction(null)} src={close} />
+            <CloseButton
+              onClick={() => setChangeTransaction(null)}
+              src={close}
+            />
           </StyledModalHeadRow>
           <StyledLogoRow>
             <div>{coin.symbol.toUpperCase()}</div>
@@ -96,27 +106,28 @@ const TransactionModal = ({ coinId, setAddTransaction }: Props) => {
             <StyledActionCol>
               <label>Amount:</label>
               <StyledInput
+                defaultValue={transaction.amount}
                 type="number"
                 onChange={(e) => setAmount(Number(e.target.value))}
               />
               <label>Price:</label>
               <StyledInput
-                defaultValue={coin.market_data.current_price.usd}
+                defaultValue={transaction.price}
                 type="number"
                 onChange={(e) => setPrice(Number(e.target.value))}
               />
               <label>Date:</label>
               <StyledInput
                 type="date"
-                defaultValue={new Date().toISOString().slice(0, 10)}
+                defaultValue={transaction.date}
                 onChange={(e) => setDate(e.target.value)}
               />
             </StyledActionCol>
             <StyledButtonsCol>
-              <StyledActionButton onClick={() => addCoin(coinId, "buy")}>
+              <StyledActionButton onClick={() => changeTransaction("buy")}>
                 BUY!
               </StyledActionButton>
-              <StyledActionButton onClick={() => addCoin(coinId, "sell")}>
+              <StyledActionButton onClick={() => changeTransaction("sell")}>
                 SELL!
               </StyledActionButton>
             </StyledButtonsCol>
@@ -129,4 +140,4 @@ const TransactionModal = ({ coinId, setAddTransaction }: Props) => {
   );
 };
 
-export default TransactionModal;
+export default ChangeModal;

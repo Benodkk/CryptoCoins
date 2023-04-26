@@ -1,23 +1,44 @@
 import { useState } from "react";
 import { useEffect } from "react";
-
-interface Props {
-  sortedCoins: {
-    [x: string]: any;
-  };
-}
+import { db, auth } from "../../config/firebase";
+import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import {
+  StyledCoinsBottomHeader,
+  StyledCoinsOverview,
+  StyledCoinsRow,
+  StyledCoinsTopHeader,
+} from "./Profile.styled";
+import { StyledSectionName } from "../MainSite/MainSite.styled";
 
 interface CoinsSummary {
-  icon: string;
-  short: string;
-  amount: number;
-  currentPrice: string;
-  currentPortfolioValue: string;
+  name: string;
+  currentPrice: number;
+  transactionsBuy: number;
+  transactionsSell: number;
   averageBuyPrice: number;
-  totalMoneyInvested: number;
   averageSellPrice: number;
+  totalMoneyInvested: number;
   totalMoneyWithdraw: number;
   profit: number;
+  amount: number;
+  currentPortfolioValue: number;
+}
+
+interface Transaction {
+  name: string;
+  amount: number;
+  coinId: string;
+  date: string;
+  id: string;
+  price: number;
+  type: string;
+}
+
+interface SortedCoins {
+  [x: string]: {
+    transactions: Transaction[];
+    currentPrice: number;
+  };
 }
 
 const containerStyle: React.CSSProperties | undefined = {
@@ -31,73 +52,163 @@ const elementStyle: React.CSSProperties | undefined = {
   gap: "40px",
 };
 
-const CoinsOverview = ({ sortedCoins }: Props) => {
+const CoinsOverview = () => {
+  const user = auth.currentUser?.uid;
+  const [sortedCoins, setSortedCoins] = useState({});
   const [coinsSummary, setCoinsSummary] = useState<CoinsSummary[] | null>(null);
-  useEffect(() => {
+
+  const getCoinsList = async () => {
     let coins: CoinsSummary[] = [];
-    for (let id in sortedCoins) {
-      let buyPrice = {
-        sumOfInvested: 0,
-        sumOfAmounts: 0,
-      };
+    const transactionsColletionRef = collection(
+      db,
+      "users",
+      `${user}`,
+      "transactions"
+    );
+    try {
+      const data = await getDocs(transactionsColletionRef);
 
-      let sellPrice = {
-        sumOfInvested: 0,
-        sumOfAmounts: 0,
-      };
-      let amount = 0;
+      const filteredData = data.docs.map((doc) => {
+        const transaction = doc.data() as Transaction;
+        return {
+          ...transaction,
+        };
+      });
 
-      sortedCoins[id].forEach(
-        (coin: { amount: number; price: number; type: string }) => {
+      const groupedData = filteredData.reduce((acc: SortedCoins, curr) => {
+        const id = curr.coinId;
+        if (!acc[id]) {
+          acc[id] = {
+            transactions: [],
+            currentPrice: 0,
+          };
+        }
+        acc[id].transactions.push(curr);
+        return acc;
+      }, {});
+
+      for (let id in groupedData) {
+        const fetcheCoin = await fetch(
+          `https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=usd`
+        );
+        const coin = await fetcheCoin.json();
+        if (coin) {
+          groupedData[id].currentPrice = coin[id].usd;
+        }
+      }
+
+      setSortedCoins(groupedData);
+
+      for (let id in groupedData) {
+        let buy = {
+          count: 0,
+          sumOfInvested: 0,
+          sumOfAmounts: 0,
+        };
+
+        let sell = {
+          count: 0,
+          sumOfInvested: 0,
+          sumOfAmounts: 0,
+        };
+        let amount = 0;
+
+        groupedData[id].transactions.forEach((coin: Transaction) => {
           const invested = coin.amount * coin.price;
           if (coin.type === "buy") {
-            buyPrice.sumOfInvested += invested;
-            buyPrice.sumOfAmounts += coin.amount;
+            buy.count += 1;
+            buy.sumOfInvested += invested;
+            buy.sumOfAmounts += coin.amount;
           }
           if (coin.type === "sell") {
-            sellPrice.sumOfInvested += invested;
-            sellPrice.sumOfAmounts += coin.amount;
+            sell.count += 1;
+            sell.sumOfInvested += invested;
+            sell.sumOfAmounts += coin.amount;
           }
-          amount += coin.amount;
-        }
-      );
+        });
 
-      const averageBuyPrice = buyPrice.sumOfInvested / buyPrice.sumOfAmounts;
-      const averageSellPrice = sellPrice.sumOfInvested / sellPrice.sumOfAmounts;
+        const averageBuyPrice = buy.sumOfInvested / buy.sumOfAmounts;
+        const averageSellPrice = sell.sumOfInvested / sell.sumOfAmounts;
 
-      coins.push({
-        icon: "API",
-        short: "API",
-        amount: amount,
-        currentPrice: "API",
-        currentPortfolioValue: "API+",
-        averageBuyPrice: averageBuyPrice,
-        totalMoneyInvested: buyPrice.sumOfInvested,
-        averageSellPrice: averageSellPrice,
-        totalMoneyWithdraw: sellPrice.sumOfInvested,
-        profit: sellPrice.sumOfInvested - buyPrice.sumOfInvested,
-      });
+        coins.push({
+          name: groupedData[id].transactions[0].name,
+          currentPrice: groupedData[id].currentPrice,
+          transactionsBuy: buy.count,
+          transactionsSell: sell.count,
+          averageBuyPrice: averageBuyPrice,
+          averageSellPrice: averageSellPrice,
+          totalMoneyInvested: buy.sumOfInvested,
+          totalMoneyWithdraw: sell.sumOfInvested,
+          profit: sell.sumOfInvested - buy.sumOfInvested,
+          amount: buy.sumOfAmounts - sell.sumOfAmounts,
+          currentPortfolioValue: Number(
+            (
+              groupedData[id].currentPrice *
+              (buy.sumOfAmounts - sell.sumOfAmounts)
+            ).toFixed(2)
+          ),
+        });
+      }
+      setCoinsSummary(coins);
+      console.log(coins);
+    } catch (err) {
+      console.error(err);
     }
-    setCoinsSummary(coins);
-  }, []);
+  };
+
+  useEffect(() => {
+    getCoinsList();
+  }, [user]);
 
   return (
-    <div style={containerStyle}>
-      Coins Overview
-      {coinsSummary?.map((coin) => {
-        return (
-          <div style={elementStyle}>
-            <div>{coin.short}</div>
-            <div>{coin.amount}</div>
-            <div>{coin.averageBuyPrice}</div>
-            <div>{coin.totalMoneyInvested}</div>
-            <div>{coin.averageSellPrice ? coin.averageSellPrice : 0}</div>
-            <div>{coin.totalMoneyWithdraw}</div>
-            <div>{coin.profit}</div>
-          </div>
-        );
-      })}
-    </div>
+    <StyledCoinsOverview>
+      <StyledSectionName>Coin overview</StyledSectionName>
+      <table>
+        <thead>
+          <StyledCoinsTopHeader>
+            <th>Coin</th>
+            <th>Current value</th>
+            <th>Transactions</th>
+            <th>Average price</th>
+            <th>All transacions value</th>
+            <th>Profit</th>
+            <th>Coins remaining</th>
+          </StyledCoinsTopHeader>
+          <StyledCoinsBottomHeader>
+            <th></th>
+            <th></th>
+            <th>buy</th>
+            <th>sell</th>
+            <th>buy</th>
+            <th>sell</th>
+            <th>buy</th>
+            <th>sell</th>
+            <th></th>
+            <th>Amount</th>
+            <th>Total value</th>
+          </StyledCoinsBottomHeader>
+        </thead>
+        <tbody>
+          {coinsSummary?.map((coin) => {
+            return (
+              <StyledCoinsRow>
+                <td>{coin.name}</td>
+                <td>{coin.currentPrice}</td>
+                <td>{coin.transactionsBuy}</td>
+                <td>{coin.transactionsSell}</td>
+                <td>{coin.averageBuyPrice}</td>
+                <td>{coin.averageSellPrice ? coin.averageSellPrice : "-"}</td>
+                <td>{coin.totalMoneyInvested}</td>
+                <td>{coin.totalMoneyWithdraw}</td>
+                <td>{coin.profit}</td>
+                <td>{coin.amount}</td>
+                <td>{coin.currentPortfolioValue}</td>
+              </StyledCoinsRow>
+            );
+          })}
+        </tbody>
+      </table>
+    </StyledCoinsOverview>
   );
 };
 

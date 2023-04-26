@@ -1,13 +1,14 @@
 import styled from "styled-components";
 
 export const StyledModalContainer = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: rgba(4, 7, 46, 0.8);
+  z-index: 3;
   width: 100vw;
   height: 100vh;
 `;

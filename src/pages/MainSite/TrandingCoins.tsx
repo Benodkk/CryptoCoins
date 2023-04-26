@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import {
   StyledOneTrandingCoin,
+  StyledSectionName,
   StyledTrandingCoins,
   StyledTrandingCoinsSection,
 } from "./MainSite.styled";
@@ -33,12 +34,12 @@ const TrandingCoins = () => {
 
   return (
     <StyledTrandingCoinsSection>
-      <h2>Trending Coins</h2>
+      <StyledSectionName>Trending Coins</StyledSectionName>
       <StyledTrandingCoins>
         {coins ? (
           coins.map((coin) => {
             return (
-              <StyledOneTrandingCoin>
+              <StyledOneTrandingCoin key={coin.item.id}>
                 <img src={coin.item.small} />
                 <div>{coin.item.symbol}</div>
                 <div>#Rank: {coin.item.market_cap_rank}</div>

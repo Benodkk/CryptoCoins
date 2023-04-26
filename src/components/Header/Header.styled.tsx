@@ -1,21 +1,32 @@
 import styled from "styled-components";
 
-export const StyledHeaderContainer = styled.header`
-  position: fixed;
-  width: 100vw;
+interface HeaderProps {
+  scroll: boolean;
+}
+
+export const StyledHeaderContainer = styled.header<HeaderProps>`
   display: flex;
   justify-content: center;
-  /* font-weight: 700; */
+  position: fixed;
+  width: 100%;
+  z-index: 2;
+  background-color: ${({ scroll }) => (scroll ? "rgb(0, 6, 68)" : "none")};
+  box-shadow: ${({ scroll }) =>
+    scroll ? "2px 2px 5px rgb(15, 16, 32)" : "none"};
+  transition: 0.3s;
+  top: 0;
 `;
 
 export const StyledHeader = styled.div`
   width: 1024px;
-  padding: 10px 0;
+  padding: 15px 0;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 `;
 
-export const StyledLogo = styled.h1``;
+export const StyledLogo = styled.h1`
+  cursor: pointer;
+`;
 
 export const StyledMenu = styled.div`
   display: flex;
@@ -25,8 +36,6 @@ export const StyledMenu = styled.div`
 `;
 
 export const StyledNavigate = styled.div`
-  /* border-left: 1px solid white; */
-  /* padding: 0 20px; */
   cursor: pointer;
   &:first-child {
     border-left: 0;
