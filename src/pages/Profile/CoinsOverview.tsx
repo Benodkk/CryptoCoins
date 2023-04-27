@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { db, auth } from "../../config/firebase";
-import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import {
   StyledCoinsBottomHeader,
   StyledCoinsOverview,
@@ -41,24 +41,24 @@ interface SortedCoins {
   };
 }
 
-const containerStyle: React.CSSProperties | undefined = {
-  display: "flex",
-  flexDirection: "column",
-  gap: "40px",
-};
+interface PortfolioValue {
+  profit: number;
+  coinsValue: number;
+}
 
-const elementStyle: React.CSSProperties | undefined = {
-  display: "flex",
-  gap: "40px",
-};
+interface Props {
+  setPortfolioValue: React.Dispatch<
+    React.SetStateAction<PortfolioValue | undefined>
+  >;
+}
 
-const CoinsOverview = () => {
+const CoinsOverview = ({ setPortfolioValue }: Props) => {
   const user = auth.currentUser?.uid;
-  const [sortedCoins, setSortedCoins] = useState({});
   const [coinsSummary, setCoinsSummary] = useState<CoinsSummary[] | null>(null);
 
   const getCoinsList = async () => {
     let coins: CoinsSummary[] = [];
+
     const transactionsColletionRef = collection(
       db,
       "users",
@@ -67,7 +67,6 @@ const CoinsOverview = () => {
     );
     try {
       const data = await getDocs(transactionsColletionRef);
-
       const filteredData = data.docs.map((doc) => {
         const transaction = doc.data() as Transaction;
         return {
@@ -97,8 +96,6 @@ const CoinsOverview = () => {
         }
       }
 
-      setSortedCoins(groupedData);
-
       for (let id in groupedData) {
         let buy = {
           count: 0,
@@ -111,7 +108,6 @@ const CoinsOverview = () => {
           sumOfInvested: 0,
           sumOfAmounts: 0,
         };
-        let amount = 0;
 
         groupedData[id].transactions.forEach((coin: Transaction) => {
           const invested = coin.amount * coin.price;
@@ -141,16 +137,24 @@ const CoinsOverview = () => {
           totalMoneyWithdraw: sell.sumOfInvested,
           profit: sell.sumOfInvested - buy.sumOfInvested,
           amount: buy.sumOfAmounts - sell.sumOfAmounts,
-          currentPortfolioValue: Number(
-            (
-              groupedData[id].currentPrice *
-              (buy.sumOfAmounts - sell.sumOfAmounts)
-            ).toFixed(2)
-          ),
+          currentPortfolioValue:
+            groupedData[id].currentPrice *
+            (buy.sumOfAmounts - sell.sumOfAmounts),
         });
       }
+      const profit = coins.reduce(
+        (totalProfit, coin) => totalProfit + coin.profit,
+        0
+      );
+      const currentPortfolioValue = coins.reduce(
+        (totalValue, coin) => totalValue + coin.currentPortfolioValue,
+        0
+      );
+      setPortfolioValue({
+        profit: profit,
+        coinsValue: currentPortfolioValue,
+      });
       setCoinsSummary(coins);
-      console.log(coins);
     } catch (err) {
       console.error(err);
     }
@@ -191,18 +195,18 @@ const CoinsOverview = () => {
         <tbody>
           {coinsSummary?.map((coin) => {
             return (
-              <StyledCoinsRow>
+              <StyledCoinsRow key={coin.name}>
                 <td>{coin.name}</td>
                 <td>{coin.currentPrice}</td>
                 <td>{coin.transactionsBuy}</td>
                 <td>{coin.transactionsSell}</td>
                 <td>{coin.averageBuyPrice}</td>
                 <td>{coin.averageSellPrice ? coin.averageSellPrice : "-"}</td>
-                <td>{coin.totalMoneyInvested}</td>
-                <td>{coin.totalMoneyWithdraw}</td>
-                <td>{coin.profit}</td>
+                <td>{coin.totalMoneyInvested.toFixed(2)}</td>
+                <td>{coin.totalMoneyWithdraw.toFixed(2)}</td>
+                <td>{coin.profit.toFixed(2)}</td>
                 <td>{coin.amount}</td>
-                <td>{coin.currentPortfolioValue}</td>
+                <td>{coin.currentPortfolioValue.toFixed(2)}</td>
               </StyledCoinsRow>
             );
           })}

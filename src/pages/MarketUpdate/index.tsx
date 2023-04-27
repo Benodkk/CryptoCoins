@@ -27,13 +27,13 @@ const MarketUpdate = () => {
         const response = await fetch(url);
         const fetchedData = await response.json();
         setData(fetchedData);
-        console.log(fetchedData);
       } catch (err) {
         console.error(err);
       }
     };
     fetchData();
   }, [page_nr]);
+
   return (
     <StyledMainContainer>
       <Header />

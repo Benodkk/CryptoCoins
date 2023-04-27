@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   StyledHeader,
   StyledHeaderContainer,
@@ -12,6 +12,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../config/firebase";
 
 const Header = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const [scroll, setScroll] = useState(window.scrollY);
   const [isLogIn, setIsLogIn] = useState(false);
@@ -34,20 +35,24 @@ const Header = () => {
     }
   });
 
+  const changeSite = (url: string) => {
+    if (location.pathname !== url) {
+      navigate(url);
+    }
+  };
+
   return (
     <StyledHeaderContainer scroll={scroll > 100}>
       <StyledHeader>
-        <StyledLogo onClick={() => navigate("/")}>CryptoCoins</StyledLogo>
+        <StyledLogo onClick={() => changeSite("/")}>CryptoCoins</StyledLogo>
         <StyledMenu>
-          <StyledNavigate onClick={() => navigate("/m24")}>
+          <StyledNavigate onClick={() => changeSite("/m24")}>
             Search
           </StyledNavigate>
-          <StyledNavigate onClick={() => navigate("/market/1")}>
+          <StyledNavigate onClick={() => changeSite("/market/1")}>
             Market
           </StyledNavigate>
-          <StyledNavigate
-            onClick={() => navigate("/profile", { replace: true })}
-          >
+          <StyledNavigate onClick={() => changeSite("/profile")}>
             {isLogIn ? "Profile" : "Sign in"}
           </StyledNavigate>
         </StyledMenu>

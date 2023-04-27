@@ -37,7 +37,13 @@ export const StyledMenu = styled.div`
 
 export const StyledNavigate = styled.div`
   cursor: pointer;
-  &:first-child {
-    border-left: 0;
+  transition: 0.3s;
+  &:hover {
+    transform: translateY(2px);
+    text-shadow: 0.4px 0.4px 1px white;
+  }
+  &:active {
+    transform: translateY(4px);
+    transition: 0.2s;
   }
 `;

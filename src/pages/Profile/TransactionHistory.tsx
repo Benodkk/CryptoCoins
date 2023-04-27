@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import {
   StyledButton,
   StyledButtonsContainer,
-  StyledChangeDiv,
+  StyledChangeTd,
   StyledOneTransaction,
   StyledTransactionHistory,
+  StyledTransactionsHeader,
 } from "./Profile.styled";
 import ChangeModal from "../../components/Modals/ChangeModal";
 import { StyledSectionName } from "../MainSite/MainSite.styled";
@@ -41,8 +42,10 @@ const TransactionHistory = () => {
         const transaction = doc.data() as Transaction;
         return {
           ...transaction,
+          id: doc.id,
         };
       });
+      console.log(data);
       filteredData.sort((a, b) => {
         const dateA: any = new Date(a.date);
         const dateB: any = new Date(b.date);
@@ -73,40 +76,53 @@ const TransactionHistory = () => {
   return (
     <StyledTransactionHistory>
       <StyledSectionName>Transaction history</StyledSectionName>
-      <StyledOneTransaction>
-        <div>Coin</div>
-        <div>Price</div>
-        <div>Amount</div>
-        <div>Total</div>
-        <div>Type</div>
-        <div>Date</div>
-      </StyledOneTransaction>
-      {transactions ? (
-        transactions.map((transaction) => {
-          return (
-            <StyledOneTransaction>
-              <div>{transaction.name}</div>
-              <div>${transaction.price}</div>
-              <div>{transaction.amount}</div>
-              <div>${roundNumber(transaction.amount * transaction.price)}</div>
-              <StyledChangeDiv buy={transaction.type === "buy"}>
-                {transaction.type}
-              </StyledChangeDiv>
-              <div>{transaction.date}</div>
-              <StyledButtonsContainer>
-                <StyledButton onClick={() => setChangeTransaction(transaction)}>
-                  Change
-                </StyledButton>
-                <StyledButton onClick={() => deleteTransaction(transaction.id)}>
-                  Delete
-                </StyledButton>
-              </StyledButtonsContainer>
-            </StyledOneTransaction>
-          );
-        })
-      ) : (
-        <></>
-      )}
+      <table>
+        <thead>
+          <StyledTransactionsHeader>
+            <th>Coin</th>
+            <th>Price</th>
+            <th>Amount</th>
+            <th>Total</th>
+            <th>Type</th>
+            <th>Date</th>
+          </StyledTransactionsHeader>
+        </thead>
+        <tbody>
+          {transactions ? (
+            transactions.map((transaction) => {
+              return (
+                <StyledOneTransaction>
+                  <td>{transaction.name}</td>
+                  <td>${transaction.price}</td>
+                  <td>{transaction.amount}</td>
+                  <td>
+                    ${roundNumber(transaction.amount * transaction.price)}
+                  </td>
+                  <StyledChangeTd buy={transaction.type === "buy"}>
+                    {transaction.type}
+                  </StyledChangeTd>
+                  <td>{transaction.date}</td>
+                  <StyledButtonsContainer>
+                    <StyledButton
+                      onClick={() => setChangeTransaction(transaction)}
+                    >
+                      Change
+                    </StyledButton>
+                    <StyledButton
+                      onClick={() => deleteTransaction(transaction.id)}
+                    >
+                      Delete
+                    </StyledButton>
+                  </StyledButtonsContainer>
+                </StyledOneTransaction>
+              );
+            })
+          ) : (
+            <></>
+          )}
+        </tbody>
+      </table>
+
       {changeTransaction && (
         <ChangeModal
           transaction={changeTransaction}

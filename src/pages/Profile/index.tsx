@@ -8,14 +8,19 @@ import CoinsOverview from "./CoinsOverview";
 import { StyledMainContainer } from "./Profile.styled";
 import Header from "../../components/Header";
 
+interface PortfolioValue {
+  profit: number;
+  coinsValue: number;
+}
+
 const Profile = () => {
-  const user = auth.currentUser?.uid;
+  const [portfolioValue, setPortfolioValue] = useState<PortfolioValue>();
 
   return (
     <StyledMainContainer>
       <Header />
-      {/* <Overview transactions={transactions} /> */}
-      <CoinsOverview />
+      <Overview portfolioValue={portfolioValue} />
+      <CoinsOverview setPortfolioValue={setPortfolioValue} />
       <TransactionHistory />
     </StyledMainContainer>
   );
