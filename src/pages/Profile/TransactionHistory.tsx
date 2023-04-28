@@ -11,6 +11,7 @@ import {
 } from "./Profile.styled";
 import ChangeModal from "../../components/Modals/ChangeModal";
 import { StyledSectionName } from "../MainSite/MainSite.styled";
+import SwitchListPage from "./SwitchListPage";
 
 interface Transaction {
   id: string;
@@ -28,6 +29,7 @@ const TransactionHistory = () => {
   const [transactions, setTransactions] = useState<Transaction[]>();
   const [changeTransaction, setChangeTransaction] =
     useState<Transaction | null>(null);
+  const [page, setPage] = useState(1);
 
   const getTransactionsList = async () => {
     const transactionsColletionRef = collection(
@@ -45,7 +47,6 @@ const TransactionHistory = () => {
           id: doc.id,
         };
       });
-      console.log(data);
       filteredData.sort((a, b) => {
         const dateA: any = new Date(a.date);
         const dateB: any = new Date(b.date);
@@ -75,7 +76,6 @@ const TransactionHistory = () => {
 
   return (
     <StyledTransactionHistory>
-      <StyledSectionName>Transaction history</StyledSectionName>
       <table>
         <thead>
           <StyledTransactionsHeader>
@@ -89,39 +89,50 @@ const TransactionHistory = () => {
         </thead>
         <tbody>
           {transactions ? (
-            transactions.map((transaction) => {
-              return (
-                <StyledOneTransaction>
-                  <td>{transaction.name}</td>
-                  <td>${transaction.price}</td>
-                  <td>{transaction.amount}</td>
-                  <td>
-                    ${roundNumber(transaction.amount * transaction.price)}
-                  </td>
-                  <StyledChangeTd buy={transaction.type === "buy"}>
-                    {transaction.type}
-                  </StyledChangeTd>
-                  <td>{transaction.date}</td>
-                  <StyledButtonsContainer>
-                    <StyledButton
-                      onClick={() => setChangeTransaction(transaction)}
-                    >
-                      Change
-                    </StyledButton>
-                    <StyledButton
-                      onClick={() => deleteTransaction(transaction.id)}
-                    >
-                      Delete
-                    </StyledButton>
-                  </StyledButtonsContainer>
-                </StyledOneTransaction>
-              );
-            })
+            transactions
+              .slice(20 * (page - 1), 20 * page)
+              .map((transaction) => {
+                return (
+                  <StyledOneTransaction>
+                    <td>{transaction.name}</td>
+                    <td>${transaction.price}</td>
+                    <td>{transaction.amount}</td>
+                    <td>
+                      ${roundNumber(transaction.amount * transaction.price)}
+                    </td>
+                    <StyledChangeTd buy={transaction.type === "buy"}>
+                      {transaction.type}
+                    </StyledChangeTd>
+                    <td>{transaction.date}</td>
+                    <StyledButtonsContainer>
+                      <StyledButton
+                        onClick={() => setChangeTransaction(transaction)}
+                      >
+                        Change
+                      </StyledButton>
+                      <StyledButton
+                        onClick={() => deleteTransaction(transaction.id)}
+                      >
+                        Delete
+                      </StyledButton>
+                    </StyledButtonsContainer>
+                  </StyledOneTransaction>
+                );
+              })
           ) : (
             <></>
           )}
         </tbody>
       </table>
+      {transactions ? (
+        <SwitchListPage
+          pages={Math.ceil(transactions.length / 20)}
+          page_nr={page}
+          setPage={setPage}
+        />
+      ) : (
+        <></>
+      )}
 
       {changeTransaction && (
         <ChangeModal

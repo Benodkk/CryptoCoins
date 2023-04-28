@@ -37,7 +37,7 @@ export const StyledMenu = styled.div`
 
 export const StyledNavigate = styled.div`
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.2s;
   &:hover {
     transform: translateY(2px);
     text-shadow: 0.4px 0.4px 1px white;

@@ -9,6 +9,8 @@ import {
   StyledCoinsTopHeader,
 } from "./Profile.styled";
 import { StyledSectionName } from "../MainSite/MainSite.styled";
+import SwitchListPage from "./SwitchListPage";
+import useRoundNr from "../../hooks/useRoundNr";
 
 interface CoinsSummary {
   name: string;
@@ -55,6 +57,7 @@ interface Props {
 const CoinsOverview = ({ setPortfolioValue }: Props) => {
   const user = auth.currentUser?.uid;
   const [coinsSummary, setCoinsSummary] = useState<CoinsSummary[] | null>(null);
+  const [page, setPage] = useState(1);
 
   const getCoinsList = async () => {
     let coins: CoinsSummary[] = [];
@@ -123,8 +126,12 @@ const CoinsOverview = ({ setPortfolioValue }: Props) => {
           }
         });
 
-        const averageBuyPrice = buy.sumOfInvested / buy.sumOfAmounts;
-        const averageSellPrice = sell.sumOfInvested / sell.sumOfAmounts;
+        const averageBuyPrice = useRoundNr(
+          buy.sumOfInvested / buy.sumOfAmounts
+        );
+        const averageSellPrice = useRoundNr(
+          sell.sumOfInvested / sell.sumOfAmounts
+        );
 
         coins.push({
           name: groupedData[id].transactions[0].name,
@@ -166,7 +173,6 @@ const CoinsOverview = ({ setPortfolioValue }: Props) => {
 
   return (
     <StyledCoinsOverview>
-      <StyledSectionName>Coin overview</StyledSectionName>
       <table>
         <thead>
           <StyledCoinsTopHeader>
@@ -212,6 +218,15 @@ const CoinsOverview = ({ setPortfolioValue }: Props) => {
           })}
         </tbody>
       </table>
+      {coinsSummary ? (
+        <SwitchListPage
+          pages={Math.ceil(coinsSummary.length / 20)}
+          page_nr={page}
+          setPage={setPage}
+        />
+      ) : (
+        <></>
+      )}
     </StyledCoinsOverview>
   );
 };

@@ -27,13 +27,13 @@ const Header = () => {
     };
   }, [window.scrollY]);
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setIsLogIn(true);
-    } else {
-      setIsLogIn(false);
-    }
-  });
+  // onAuthStateChanged(auth, (user) => {
+  //   if (user) {
+  //     setIsLogIn(true);
+  //   } else {
+  //     setIsLogIn(false);
+  //   }
+  // });
 
   const changeSite = (url: string) => {
     if (location.pathname !== url) {

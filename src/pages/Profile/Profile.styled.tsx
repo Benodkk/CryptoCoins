@@ -51,7 +51,7 @@ export const StyledLogOutContainer = styled.div<StyledLogOutProps>`
 export const StyledLogOut = styled.div`
   font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.2s;
   &:hover {
     transform: translateY(2px);
     text-shadow: 0.4px 0.4px 1px white;
@@ -62,15 +62,50 @@ export const StyledOneStatContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 8px;
   div {
     font-size: 40px;
   }
 `;
+interface StyledOneStatValueProps {
+  positive: boolean;
+}
+export const StyledOneStatValue = styled.div<StyledOneStatValueProps>`
+  color: ${({ positive }) => (positive ? "green" : "red")};
+`;
 
+// tabs
+
+export const StyledTabsContainer = styled.div`
+  display: flex;
+  gap: 20px;
+`;
+
+interface StyledTabButtonProps {
+  active: boolean;
+}
+
+export const StyledTabButton = styled.button<StyledTabButtonProps>`
+  font-size: 20px;
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-weight: 600;
+  width: 220px;
+  padding: 10px 10px 10px;
+  border-bottom: ${({ active }) =>
+    active ? "2px solid blue" : "2px solid white"};
+  transition: 0.2s;
+  cursor: pointer;
+  &:hover {
+    padding: 13px 10px 7px;
+    text-shadow: 0.4px 0.4px 1px white;
+  }
+`;
 // transaction history
 
 export const StyledTransactionHistory = styled.div`
-  margin-top: 100px;
+  margin: 50px 0 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -138,7 +173,7 @@ export const StyledButton = styled.button`
 // Coins overview
 
 export const StyledCoinsOverview = styled.div`
-  margin-top: 100px;
+  margin: 50px 0 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -208,5 +243,36 @@ export const StyledCoinsRow = styled.tr`
     width: 100%;
     height: 100%;
     font-size: 16px;
+  }
+`;
+
+// Switch List
+
+interface SwitchButtonsContainerProps {
+  show: boolean;
+}
+
+export const StyledSwitchButtonsContainer = styled.div<SwitchButtonsContainerProps>`
+  display: ${({ show }) => (show ? "flex" : "none")};
+  align-items: center;
+  gap: 10px;
+  padding: 30px 0;
+`;
+
+interface SwitchButtonProps {
+  selected?: boolean;
+}
+
+export const StyledSwitchButton = styled.button<SwitchButtonProps>`
+  font-size: 24px;
+  font-weight: 500;
+  padding: 8px;
+  border: none;
+  color: ${({ selected }) => (!selected ? "white" : "rgb(0,6,68)")};
+  background-color: ${({ selected }) => (!selected ? "rgb(0,6,68)" : "white")};
+  cursor: pointer;
+  &:hover {
+    color: rgb(0, 6, 68);
+    background-color: white;
   }
 `;

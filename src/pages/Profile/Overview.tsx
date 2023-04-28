@@ -5,9 +5,11 @@ import {
   StyledLogOut,
   StyledLogOutContainer,
   StyledOneStatContainer,
+  StyledOneStatValue,
   StyledOverview,
   StyledOverviewContainer,
 } from "./Profile.styled";
+import { signOut } from "firebase/auth";
 
 interface OverviewProps {
   portfolioValue:
@@ -19,8 +21,6 @@ interface OverviewProps {
 }
 
 const Overview = ({ portfolioValue }: OverviewProps) => {
-  const user = auth.currentUser?.uid;
-
   const [scroll, setScroll] = useState(window.scrollY);
 
   useEffect(() => {
@@ -33,33 +33,45 @@ const Overview = ({ portfolioValue }: OverviewProps) => {
     };
   }, [window.scrollY]);
 
+  const logOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <StyledOverviewContainer>
       <StyledOverview>
         <StyledLogOutContainer scroll={scroll > 30}>
           <div>
             <strong>Current Profile: </strong>
-            Daniel.aksdoa@vp.pl
+            {auth.currentUser?.email}
           </div>
-          <StyledLogOut>Log out</StyledLogOut>
+          <StyledLogOut onClick={logOut}>Log out</StyledLogOut>
         </StyledLogOutContainer>
         {portfolioValue ? (
           <>
             <StyledOneStatContainer>
               <div>Transactions profit</div>
-              <div>{portfolioValue?.profit.toFixed(2)}</div>
+              <StyledOneStatValue positive={portfolioValue.profit > 0}>
+                {portfolioValue.profit.toFixed(2)}
+              </StyledOneStatValue>
             </StyledOneStatContainer>
             <StyledOneStatContainer>
               <div>Portfolio value</div>
-              <div>{portfolioValue?.coinsValue.toFixed(2)}</div>
+              <StyledOneStatValue positive={portfolioValue.coinsValue > 0}>
+                {portfolioValue.coinsValue.toFixed(2)}
+              </StyledOneStatValue>
             </StyledOneStatContainer>
             <StyledOneStatContainer>
               <div>Overwall profit</div>
-              <div>
-                {(portfolioValue?.profit + portfolioValue?.coinsValue).toFixed(
-                  2
-                )}
-              </div>
+              <StyledOneStatValue
+                positive={portfolioValue.profit + portfolioValue.coinsValue > 0}
+              >
+                {(portfolioValue.profit + portfolioValue.coinsValue).toFixed(2)}
+              </StyledOneStatValue>
             </StyledOneStatContainer>
           </>
         ) : (
