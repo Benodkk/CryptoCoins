@@ -19,13 +19,24 @@ export const StyledOverviewContainer = styled.section`
 
 export const StyledOverview = styled.section`
   margin-top: 70px;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   position: relative;
   align-items: center;
   justify-content: center;
   width: 1024px;
   height: 50vh;
   gap: 50px;
+`;
+
+export const StyledOneStatContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  div {
+    font-size: 36px;
+  }
 `;
 
 interface StyledLogOutProps {
@@ -58,15 +69,6 @@ export const StyledLogOut = styled.div`
   }
 `;
 
-export const StyledOneStatContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  div {
-    font-size: 40px;
-  }
-`;
 interface StyledOneStatValueProps {
   positive: boolean;
 }

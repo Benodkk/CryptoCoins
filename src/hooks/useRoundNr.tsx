@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-
-function useRoundNr(number: number): number | null {
+function useRoundNr(number: number): number {
   let nr: number;
 
   const str = number.toString();

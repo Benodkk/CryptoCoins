@@ -27,13 +27,9 @@ const Header = () => {
     };
   }, [window.scrollY]);
 
-  // onAuthStateChanged(auth, (user) => {
-  //   if (user) {
-  //     setIsLogIn(true);
-  //   } else {
-  //     setIsLogIn(false);
-  //   }
-  // });
+  // useEffect(()=>{
+  //   if(auth.currentUser)
+  // },[auth.currentUser])
 
   const changeSite = (url: string) => {
     if (location.pathname !== url) {
@@ -52,8 +48,12 @@ const Header = () => {
           <StyledNavigate onClick={() => changeSite("/market/1")}>
             Market
           </StyledNavigate>
-          <StyledNavigate onClick={() => changeSite("/profile")}>
-            {isLogIn ? "Profile" : "Sign in"}
+          <StyledNavigate
+            onClick={() =>
+              changeSite(auth.currentUser ? "/profile" : "/sign_in")
+            }
+          >
+            {auth.currentUser ? "Profile" : "Sign in"}
           </StyledNavigate>
         </StyledMenu>
       </StyledHeader>

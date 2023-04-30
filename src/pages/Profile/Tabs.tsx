@@ -7,7 +7,6 @@ interface Props {
 }
 
 const Tabs = ({ selectedTab, setSelectedTab }: Props) => {
-  const [bo, setBo] = useState("asd");
   return (
     <StyledTabsContainer>
       <StyledTabButton

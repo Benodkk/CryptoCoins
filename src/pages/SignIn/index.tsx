@@ -4,6 +4,14 @@ import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
 import { auth, googleProvider } from "../../config/firebase";
 
+import {
+  StyledInput,
+  StyledSignInContainer,
+  StyledSignInForm,
+  StyledSignInTitle,
+  StyledSubmitForm,
+} from "./SingIn.styled";
+
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,8 +35,14 @@ const SignIn = () => {
   };
 
   return (
-    <div>
-      <div>
+    <StyledSignInContainer>
+      <StyledSignInForm>
+        <StyledSignInTitle>Sign in</StyledSignInTitle>
+        <StyledInput />
+        <StyledInput />
+        <StyledSubmitForm type="submit" />
+      </StyledSignInForm>
+      {/* <div>
         <button onClick={signInWithGoogle}>Sign in with Google!</button>
       </div>
       <div>
@@ -42,8 +56,8 @@ const SignIn = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button onClick={signIn}>Sign In</button>
-      </div>
-    </div>
+      </div> */}
+    </StyledSignInContainer>
   );
 };
 
