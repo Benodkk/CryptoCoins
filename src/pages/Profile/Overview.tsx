@@ -10,6 +10,7 @@ import {
   StyledOverviewContainer,
 } from "./Profile.styled";
 import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router";
 
 interface OverviewProps {
   portfolioValue:
@@ -21,6 +22,7 @@ interface OverviewProps {
 }
 
 const Overview = ({ portfolioValue }: OverviewProps) => {
+  const navigate = useNavigate();
   const [scroll, setScroll] = useState(window.scrollY);
 
   useEffect(() => {
@@ -38,6 +40,8 @@ const Overview = ({ portfolioValue }: OverviewProps) => {
       await signOut(auth);
     } catch (err) {
       console.error(err);
+    } finally {
+      navigate("/");
     }
   };
 

@@ -17,9 +17,9 @@ import {
   StyledWithGoogle,
   StyledSignUpNavigate,
 } from "./SingIn.styled";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
-const errorTypes = {
+const errorMessage = {
   emptyEmail: "Enter Email",
   emptyPassword: "Enter Password",
   wrong: "Wrong E-mail or Password",
@@ -36,21 +36,23 @@ const SignIn = () => {
     e.preventDefault();
 
     if (email.length === 0) {
-      setError(errorTypes.emptyEmail);
+      setError(errorMessage.emptyEmail);
       setShowError(true);
     } else if (password.length === 0) {
-      setError(errorTypes.emptyPassword);
+      setError(errorMessage.emptyPassword);
       setShowError(true);
     } else {
+      let logInError: null | string = null;
       try {
         await signInWithEmailAndPassword(auth, email, password);
       } catch (err) {
-        setError(errorTypes.wrong);
+        logInError = errorMessage.wrong;
+        setError(errorMessage.wrong);
         setShowError(true);
         console.log(err);
       } finally {
-        if (!error) {
-          navigate("/");
+        if (!logInError) {
+          navigate("/profile");
         }
       }
     }
@@ -63,7 +65,7 @@ const SignIn = () => {
       console.error(err);
     } finally {
       if (auth) {
-        navigate("/");
+        navigate("/profile");
       }
     }
   };
@@ -71,11 +73,17 @@ const SignIn = () => {
   return (
     <StyledSignInContainer>
       <StyledSignInForm>
+        <Error
+          error={error}
+          showError={showError}
+          setShowError={setShowError}
+        />
         <StyledSignInTitle>Sign in</StyledSignInTitle>
         <StyledSignIn>
           <StyledInput
             placeholder="E-mail"
             onChange={(e) => setEmail(e.target.value)}
+            type="email"
           />
           <StyledInput
             placeholder="Password"
@@ -87,15 +95,12 @@ const SignIn = () => {
             <img src={googleIcon} alt="google" />
             <div>Google</div>
           </StyledWithGoogle>
-          <Error
-            error={error}
-            showError={showError}
-            setShowError={setShowError}
-          />
         </StyledSignIn>
         <StyledSignUp>
           <div>Don't have account?</div>
-          <StyledSignUpNavigate>Sign up!</StyledSignUpNavigate>
+          <StyledSignUpNavigate onClick={() => navigate("/sign_up")}>
+            Sign up!
+          </StyledSignUpNavigate>
         </StyledSignUp>
       </StyledSignInForm>
     </StyledSignInContainer>

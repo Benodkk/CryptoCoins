@@ -5,12 +5,12 @@ interface Props {
 }
 
 export const StyledErrorContainer = styled.div<Props>`
+  z-index: 2;
   display: grid;
   grid-template-columns: 4fr 1fr;
   row-gap: 10px;
   position: absolute;
-  top: 25%;
-  /* left: 10%; */
+  top: 125px;
   width: 80%;
   padding: 10px;
   border-radius: 10px;
