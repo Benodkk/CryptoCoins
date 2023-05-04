@@ -10,12 +10,13 @@ import {
 } from "./Header.styled";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../config/firebase";
+import Search from "../Search";
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [scroll, setScroll] = useState(window.scrollY);
-  const [isLogIn, setIsLogIn] = useState(false);
+  const [search, setSearch] = useState(false);
 
   useEffect(() => {
     function handleScroll() {
@@ -26,10 +27,6 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [window.scrollY]);
-
-  // useEffect(()=>{
-  //   if(auth.currentUser)
-  // },[auth.currentUser])
 
   const changeSite = (url: string) => {
     if (location.pathname !== url) {
@@ -42,9 +39,6 @@ const Header = () => {
       <StyledHeader>
         <StyledLogo onClick={() => changeSite("/")}>CryptoCoins</StyledLogo>
         <StyledMenu>
-          <StyledNavigate onClick={() => changeSite("/m24")}>
-            Search
-          </StyledNavigate>
           <StyledNavigate onClick={() => changeSite("/market/1")}>
             Market
           </StyledNavigate>
@@ -55,6 +49,13 @@ const Header = () => {
           >
             {auth.currentUser ? "Profile" : "Sign in"}
           </StyledNavigate>
+          {search ? (
+            <Search setSearch={setSearch} />
+          ) : (
+            <StyledNavigate onClick={() => setSearch(true)}>
+              Search
+            </StyledNavigate>
+          )}
         </StyledMenu>
       </StyledHeader>
     </StyledHeaderContainer>

@@ -5,11 +5,7 @@ import { useEffect, useState } from "react";
 import Overview from "./Overview";
 import TransactionHistory from "./TransactionHistory";
 import CoinsOverview from "./CoinsOverview";
-import {
-  StyledMainContainer,
-  StyledTabButton,
-  StyledTabsContainer,
-} from "./Profile.styled";
+import { StyledMainContainer } from "./Profile.styled";
 import Header from "../../components/Header";
 import Tabs from "./Tabs";
 

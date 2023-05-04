@@ -33,6 +33,7 @@ export const StyledMenu = styled.div`
   align-items: center;
   justify-self: flex-end;
   gap: 40px;
+  position: relative;
 `;
 
 export const StyledNavigate = styled.div`

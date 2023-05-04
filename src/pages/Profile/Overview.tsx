@@ -11,6 +11,7 @@ import {
 } from "./Profile.styled";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router";
+import { BeatLoader } from "react-spinners";
 
 interface OverviewProps {
   portfolioValue:
@@ -24,6 +25,7 @@ interface OverviewProps {
 const Overview = ({ portfolioValue }: OverviewProps) => {
   const navigate = useNavigate();
   const [scroll, setScroll] = useState(window.scrollY);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     function handleScroll() {
@@ -36,6 +38,7 @@ const Overview = ({ portfolioValue }: OverviewProps) => {
   }, [window.scrollY]);
 
   const logOut = async () => {
+    setLoading(true);
     try {
       await signOut(auth);
     } catch (err) {
@@ -43,6 +46,7 @@ const Overview = ({ portfolioValue }: OverviewProps) => {
     } finally {
       navigate("/");
     }
+    setLoading(false);
   };
 
   return (
@@ -53,7 +57,9 @@ const Overview = ({ portfolioValue }: OverviewProps) => {
             <strong>Current Profile: </strong>
             {auth.currentUser?.email}
           </div>
-          <StyledLogOut onClick={logOut}>Log out</StyledLogOut>
+          <StyledLogOut onClick={logOut}>
+            {loading ? <BeatLoader color={"#ffffff"} /> : "Log out"}
+          </StyledLogOut>
         </StyledLogOutContainer>
         {portfolioValue ? (
           <>

@@ -1,4 +1,4 @@
-function useRoundNr(number: number): number {
+function useRoundNr(number: number) {
   let nr: number;
 
   const str = number.toString();
@@ -11,13 +11,12 @@ function useRoundNr(number: number): number {
       decimalPart = decimalPart.substr(1);
     }
 
-    const result = parseFloat(`${integerPart}.${decimalPart}`).toPrecision(4);
+    const result = parseFloat(`${integerPart}.${decimalPart}`).toPrecision(5);
     nr = parseFloat(result);
   } else {
-    nr = parseFloat(number.toPrecision(4));
+    nr = parseFloat(number.toPrecision(5));
   }
-
-  return nr;
+  return nr.toLocaleString();
 }
 
 export default useRoundNr;

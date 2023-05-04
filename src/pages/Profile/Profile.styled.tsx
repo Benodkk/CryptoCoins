@@ -278,3 +278,15 @@ export const StyledSwitchButton = styled.button<SwitchButtonProps>`
     background-color: white;
   }
 `;
+
+// No transactions
+
+export const StyledNoTransactions = styled.div`
+  font-size: 36px;
+  cursor: pointer;
+  transition: 0.2s;
+  &:hover {
+    transform: translateY(2px);
+    text-shadow: 0.4px 0.4px 1px white;
+  }
+`;

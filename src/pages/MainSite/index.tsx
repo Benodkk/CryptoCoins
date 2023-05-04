@@ -1,3 +1,4 @@
+import DetailsModal from "../../components/DetailsModal";
 import Header from "../../components/Header";
 import { StyledMainContainer } from "./MainSite.styled";
 import MarketUpdate from "./MarketUpdate";

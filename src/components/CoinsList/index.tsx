@@ -10,7 +10,7 @@ import {
   StyledTransactionButton,
 } from "./CoinsList.styled";
 
-import TransactionModal from "../Modals/TransactionModal";
+import TransactionModal from "../TransactionModal";
 
 interface CoinDetails {
   id: string;

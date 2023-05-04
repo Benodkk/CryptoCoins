@@ -20,8 +20,22 @@ interface CoinDetails {
 
 const MarketUpdate = () => {
   const [coins, setCoins] = useState<CoinDetails[]>();
-  const [addTransaction, setAddTransaction] = useState<string | null>(null);
   const nav = useNavigate();
+
+  const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=7&page=1&sparkline=false&locale=en`;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url);
+        const fetchedData = await response.json();
+        setCoins(fetchedData);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <StyledMarketUpdateSection>

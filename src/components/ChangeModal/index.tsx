@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 
-import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db, auth } from "../../config/firebase";
 
-import close from "../../assets/close.png";
+import padlock from "../../assets/padlock.png";
+import padlockUnlock from "../../assets/padlock-unlock.png";
 
+import CloseButton from "../CloseButton";
 import {
-  CloseButton,
   StyledActionButton,
   StyledActionCol,
   StyledActionRow,
@@ -16,7 +17,8 @@ import {
   StyledModal,
   StyledModalContainer,
   StyledModalHeadRow,
-} from "./Modals.styled";
+} from "./ChangeModal.styled";
+import useRoundNr from "../../hooks/useRoundNr";
 
 interface Transaction {
   id: string;
@@ -46,6 +48,10 @@ const ChangeModal = ({ transaction, setChangeTransaction }: Props) => {
   const [coin, setCoin] = useState<Coin>();
   const [amount, setAmount] = useState(transaction.amount);
   const [price, setPrice] = useState(transaction.price);
+  const [inTotal, setInTotal] = useState(
+    useRoundNr(transaction.price * transaction.amount)
+  );
+  const [disable, setDisable] = useState("inTotal");
   const [date, setDate] = useState(transaction.date);
 
   const url = `https://api.coingecko.com/api/v3/coins/${transaction.coinId}`;
@@ -56,7 +62,6 @@ const ChangeModal = ({ transaction, setChangeTransaction }: Props) => {
         const response = await fetch(url);
         const fetchedData = await response.json();
         setCoin(fetchedData);
-        console.log(fetchedData);
       } catch (err) {
         console.error(err);
       }
@@ -87,16 +92,43 @@ const ChangeModal = ({ transaction, setChangeTransaction }: Props) => {
     setChangeTransaction(null);
   };
 
+  const priceChange = (value: number, changeType: string) => {
+    if (changeType == "amount") {
+      setAmount(value);
+      if (disable === "price") {
+        setPrice(value * inTotal);
+      }
+      if (disable === "inTotal") {
+        setInTotal(value * price);
+      }
+    }
+    if (changeType == "price") {
+      setPrice(value);
+      if (disable === "amount") {
+        setAmount(value * inTotal);
+      }
+      if (disable === "inTotal") {
+        setInTotal(value * amount);
+      }
+    }
+    if (changeType == "inTotal") {
+      setInTotal(value);
+      if (disable === "amount") {
+        setAmount(value / price);
+      }
+      if (disable === "price") {
+        setPrice(value / amount);
+      }
+    }
+  };
+
   return (
     <StyledModalContainer>
       {coin ? (
         <StyledModal>
           <StyledModalHeadRow>
             <div>Add transaction</div>
-            <CloseButton
-              onClick={() => setChangeTransaction(null)}
-              src={close}
-            />
+            <CloseButton onClick={() => setChangeTransaction(null)} />
           </StyledModalHeadRow>
           <StyledLogoRow>
             <div>{coin.symbol.toUpperCase()}</div>
@@ -106,20 +138,47 @@ const ChangeModal = ({ transaction, setChangeTransaction }: Props) => {
             <StyledActionCol>
               <label>Amount:</label>
               <StyledInput
-                defaultValue={transaction.amount}
+                disabled={disable === "amount"}
+                value={amount}
                 type="number"
-                onChange={(e) => setAmount(Number(e.target.value))}
+                onChange={(e) => priceChange(Number(e.target.value), "amount")}
               />
-              <label>Price:</label>
+              <img
+                onClick={() => setDisable("amount")}
+                src={disable === "amount" ? padlock : padlockUnlock}
+                alt="lock"
+              />
+
+              <label>Price($):</label>
               <StyledInput
-                defaultValue={transaction.price}
+                disabled={disable === "price"}
+                value={price}
                 type="number"
-                onChange={(e) => setPrice(Number(e.target.value))}
+                onChange={(e) => priceChange(Number(e.target.value), "price")}
               />
+              <img
+                onClick={() => setDisable("price")}
+                src={disable === "price" ? padlock : padlockUnlock}
+                alt="lock"
+              />
+
+              <label>In total($):</label>
+              <StyledInput
+                disabled={disable === "inTotal"}
+                value={inTotal}
+                type="number"
+                onChange={(e) => priceChange(Number(e.target.value), "inTotal")}
+              />
+              <img
+                onClick={() => setDisable("inTotal")}
+                src={disable === "inTotal" ? padlock : padlockUnlock}
+                alt="lock"
+              />
+
               <label>Date:</label>
               <StyledInput
                 type="date"
-                defaultValue={transaction.date}
+                value={date}
                 onChange={(e) => setDate(e.target.value)}
               />
             </StyledActionCol>

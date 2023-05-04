@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import DetailsModal from "../../components/DetailsModal";
+import TransactionModal from "../../components/TransactionModal";
 import {
   StyledOneTrandingCoin,
   StyledSectionName,
@@ -18,6 +20,8 @@ interface CoinDetails {
 
 const TrandingCoins = () => {
   const [coins, setCoins] = useState<CoinDetails[]>();
+  const [showDetails, setShowDetails] = useState<null | string>(null);
+  const [addTransaction, setAddTransaction] = useState<null | string>(null);
 
   const url = "https://api.coingecko.com/api/v3/search/trending";
 
@@ -39,7 +43,10 @@ const TrandingCoins = () => {
         {coins ? (
           coins.map((coin) => {
             return (
-              <StyledOneTrandingCoin key={coin.item.id}>
+              <StyledOneTrandingCoin
+                key={coin.item.id}
+                onClick={() => setShowDetails(coin.item.id)}
+              >
                 <img src={coin.item.small} />
                 <div>{coin.item.symbol}</div>
                 <div>#Rank: {coin.item.market_cap_rank}</div>
@@ -50,6 +57,19 @@ const TrandingCoins = () => {
           <></>
         )}
       </StyledTrandingCoins>
+      {showDetails && (
+        <DetailsModal
+          setAddTransaction={setAddTransaction}
+          setShowDetails={setShowDetails}
+          coinId={showDetails}
+        />
+      )}
+      {addTransaction && (
+        <TransactionModal
+          setAddTransaction={setAddTransaction}
+          coinId={addTransaction}
+        />
+      )}
     </StyledTrandingCoinsSection>
   );
 };

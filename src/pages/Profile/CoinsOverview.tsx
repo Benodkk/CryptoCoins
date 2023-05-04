@@ -8,9 +8,9 @@ import {
   StyledCoinsRow,
   StyledCoinsTopHeader,
 } from "./Profile.styled";
-import { StyledSectionName } from "../MainSite/MainSite.styled";
 import SwitchListPage from "./SwitchListPage";
 import useRoundNr from "../../hooks/useRoundNr";
+import NoTrasactions from "./NoTrasactions";
 
 interface CoinsSummary {
   name: string;
@@ -56,7 +56,7 @@ interface Props {
 
 const CoinsOverview = ({ setPortfolioValue }: Props) => {
   const user = auth.currentUser?.uid;
-  const [coinsSummary, setCoinsSummary] = useState<CoinsSummary[] | null>(null);
+  const [coinsSummary, setCoinsSummary] = useState<CoinsSummary[]>([]);
   const [page, setPage] = useState(1);
 
   const getCoinsList = async () => {
@@ -126,28 +126,24 @@ const CoinsOverview = ({ setPortfolioValue }: Props) => {
           }
         });
 
-        const averageBuyPrice = useRoundNr(
-          buy.sumOfInvested / buy.sumOfAmounts
-        );
-        const averageSellPrice = useRoundNr(
-          sell.sumOfInvested / sell.sumOfAmounts
-        );
-
-        coins.push({
+        const coin = {
           name: groupedData[id].transactions[0].name,
           currentPrice: groupedData[id].currentPrice,
-          transactionsBuy: buy.count,
-          transactionsSell: sell.count,
-          averageBuyPrice: averageBuyPrice,
-          averageSellPrice: averageSellPrice,
-          totalMoneyInvested: buy.sumOfInvested,
-          totalMoneyWithdraw: sell.sumOfInvested,
-          profit: sell.sumOfInvested - buy.sumOfInvested,
-          amount: buy.sumOfAmounts - sell.sumOfAmounts,
-          currentPortfolioValue:
+          transactionsBuy: useRoundNr(buy.count),
+          transactionsSell: useRoundNr(sell.count),
+          averageBuyPrice: useRoundNr(buy.sumOfInvested / buy.sumOfAmounts),
+          averageSellPrice: useRoundNr(sell.sumOfInvested / sell.sumOfAmounts),
+          totalMoneyInvested: useRoundNr(buy.sumOfInvested),
+          totalMoneyWithdraw: useRoundNr(sell.sumOfInvested),
+          profit: useRoundNr(sell.sumOfInvested - buy.sumOfInvested),
+          amount: useRoundNr(buy.sumOfAmounts - sell.sumOfAmounts),
+          currentPortfolioValue: useRoundNr(
             groupedData[id].currentPrice *
-            (buy.sumOfAmounts - sell.sumOfAmounts),
-        });
+              (buy.sumOfAmounts - sell.sumOfAmounts)
+          ),
+        };
+
+        coins.push(coin);
       }
       const profit = coins.reduce(
         (totalProfit, coin) => totalProfit + coin.profit,
@@ -173,59 +169,63 @@ const CoinsOverview = ({ setPortfolioValue }: Props) => {
 
   return (
     <StyledCoinsOverview>
-      <table>
-        <thead>
-          <StyledCoinsTopHeader>
-            <th>Coin</th>
-            <th>Current value</th>
-            <th>Transactions</th>
-            <th>Average price</th>
-            <th>All transacions value</th>
-            <th>Profit</th>
-            <th>Coins remaining</th>
-          </StyledCoinsTopHeader>
-          <StyledCoinsBottomHeader>
-            <th></th>
-            <th></th>
-            <th>buy</th>
-            <th>sell</th>
-            <th>buy</th>
-            <th>sell</th>
-            <th>buy</th>
-            <th>sell</th>
-            <th></th>
-            <th>Amount</th>
-            <th>Total value</th>
-          </StyledCoinsBottomHeader>
-        </thead>
-        <tbody>
-          {coinsSummary?.map((coin) => {
-            return (
-              <StyledCoinsRow key={coin.name}>
-                <td>{coin.name}</td>
-                <td>{coin.currentPrice}</td>
-                <td>{coin.transactionsBuy}</td>
-                <td>{coin.transactionsSell}</td>
-                <td>{coin.averageBuyPrice}</td>
-                <td>{coin.averageSellPrice ? coin.averageSellPrice : "-"}</td>
-                <td>{coin.totalMoneyInvested.toFixed(2)}</td>
-                <td>{coin.totalMoneyWithdraw.toFixed(2)}</td>
-                <td>{coin.profit.toFixed(2)}</td>
-                <td>{coin.amount}</td>
-                <td>{coin.currentPortfolioValue.toFixed(2)}</td>
-              </StyledCoinsRow>
-            );
-          })}
-        </tbody>
-      </table>
-      {coinsSummary ? (
-        <SwitchListPage
-          pages={Math.ceil(coinsSummary.length / 20)}
-          page_nr={page}
-          setPage={setPage}
-        />
+      {coinsSummary.length ? (
+        <>
+          <table>
+            <thead>
+              <StyledCoinsTopHeader>
+                <th>Coin</th>
+                <th>Current value</th>
+                <th>Transactions</th>
+                <th>Average price</th>
+                <th>All transacions value</th>
+                <th>Profit</th>
+                <th>Coins remaining</th>
+              </StyledCoinsTopHeader>
+              <StyledCoinsBottomHeader>
+                <th></th>
+                <th></th>
+                <th>buy</th>
+                <th>sell</th>
+                <th>buy</th>
+                <th>sell</th>
+                <th>buy</th>
+                <th>sell</th>
+                <th></th>
+                <th>Amount</th>
+                <th>Total value</th>
+              </StyledCoinsBottomHeader>
+            </thead>
+            <tbody>
+              {coinsSummary?.map((coin) => {
+                return (
+                  <StyledCoinsRow key={coin.name}>
+                    <td>{coin.name}</td>
+                    <td>{coin.currentPrice}</td>
+                    <td>{coin.transactionsBuy}</td>
+                    <td>{coin.transactionsSell}</td>
+                    <td>{coin.averageBuyPrice}</td>
+                    <td>
+                      {coin.averageSellPrice ? coin.averageSellPrice : "-"}
+                    </td>
+                    <td>{coin.totalMoneyInvested.toFixed(2)}</td>
+                    <td>{coin.totalMoneyWithdraw.toFixed(2)}</td>
+                    <td>{coin.profit.toFixed(2)}</td>
+                    <td>{coin.amount}</td>
+                    <td>{coin.currentPortfolioValue.toFixed(2)}</td>
+                  </StyledCoinsRow>
+                );
+              })}
+            </tbody>
+          </table>
+          <SwitchListPage
+            pages={Math.ceil(coinsSummary.length / 20)}
+            page_nr={page}
+            setPage={setPage}
+          />
+        </>
       ) : (
-        <></>
+        <NoTrasactions />
       )}
     </StyledCoinsOverview>
   );

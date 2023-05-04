@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 import { addDoc, collection } from "firebase/firestore";
 import { db, auth } from "../../config/firebase";
 
-import close from "../../assets/close.png";
+import padlock from "../../assets/padlock.png";
+import padlockUnlock from "../../assets/padlock-unlock.png";
 
 import {
-  CloseButton,
   StyledActionButton,
   StyledActionCol,
   StyledActionRow,
@@ -16,7 +16,8 @@ import {
   StyledModal,
   StyledModalContainer,
   StyledModalHeadRow,
-} from "./Modals.styled";
+} from "./TransactionModal.styled";
+import CloseButton from "../CloseButton";
 
 interface Props {
   coinId: string;
@@ -40,6 +41,8 @@ const TransactionModal = ({ coinId, setAddTransaction }: Props) => {
   const [coin, setCoin] = useState<Coin>();
   const [amount, setAmount] = useState(0);
   const [price, setPrice] = useState(0);
+  const [inTotal, setInTotal] = useState(0);
+  const [disable, setDisable] = useState("inTotal");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
 
   const url = `https://api.coingecko.com/api/v3/coins/${coinId}`;
@@ -81,6 +84,35 @@ const TransactionModal = ({ coinId, setAddTransaction }: Props) => {
       console.error(err);
     }
   };
+  const priceChange = (value: number, changeType: string) => {
+    if (changeType == "amount") {
+      setAmount(value);
+      if (disable === "price") {
+        setPrice(value * inTotal);
+      }
+      if (disable === "inTotal") {
+        setInTotal(value * price);
+      }
+    }
+    if (changeType == "price") {
+      setPrice(value);
+      if (disable === "amount") {
+        setAmount(value * inTotal);
+      }
+      if (disable === "inTotal") {
+        setInTotal(value * amount);
+      }
+    }
+    if (changeType == "inTotal") {
+      setInTotal(value);
+      if (disable === "amount") {
+        setAmount(value / price);
+      }
+      if (disable === "price") {
+        setPrice(value / amount);
+      }
+    }
+  };
 
   return (
     <StyledModalContainer>
@@ -88,7 +120,7 @@ const TransactionModal = ({ coinId, setAddTransaction }: Props) => {
         <StyledModal>
           <StyledModalHeadRow>
             <div>Add transaction</div>
-            <CloseButton onClick={() => setAddTransaction(null)} src={close} />
+            <CloseButton onClick={() => setAddTransaction(null)} />
           </StyledModalHeadRow>
           <StyledLogoRow>
             <div>{coin.symbol.toUpperCase()}</div>
@@ -98,15 +130,43 @@ const TransactionModal = ({ coinId, setAddTransaction }: Props) => {
             <StyledActionCol>
               <label>Amount:</label>
               <StyledInput
+                disabled={disable === "amount"}
+                value={amount}
                 type="number"
-                onChange={(e) => setAmount(Number(e.target.value))}
+                onChange={(e) => priceChange(Number(e.target.value), "amount")}
               />
-              <label>Price:</label>
+              <img
+                onClick={() => setDisable("amount")}
+                src={disable === "amount" ? padlock : padlockUnlock}
+                alt="lock"
+              />
+
+              <label>Price($):</label>
               <StyledInput
-                defaultValue={coin.market_data.current_price.usd}
+                disabled={disable === "price"}
+                value={price}
                 type="number"
-                onChange={(e) => setPrice(Number(e.target.value))}
+                onChange={(e) => priceChange(Number(e.target.value), "price")}
               />
+              <img
+                onClick={() => setDisable("price")}
+                src={disable === "price" ? padlock : padlockUnlock}
+                alt="lock"
+              />
+
+              <label>In total($):</label>
+              <StyledInput
+                disabled={disable === "inTotal"}
+                value={inTotal}
+                type="number"
+                onChange={(e) => priceChange(Number(e.target.value), "inTotal")}
+              />
+              <img
+                onClick={() => setDisable("inTotal")}
+                src={disable === "inTotal" ? padlock : padlockUnlock}
+                alt="lock"
+              />
+
               <label>Date:</label>
               <StyledInput
                 type="date"

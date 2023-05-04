@@ -16,11 +16,13 @@ import {
   StyledSubmitForm,
   StyledWithGoogle,
   StyledSignUpNavigate,
+  StyledInputOrSpinner,
 } from "./SingIn.styled";
 import { useNavigate } from "react-router-dom";
+import { BeatLoader } from "react-spinners";
 
 const errorMessage = {
-  emptyEmail: "Enter Email",
+  emptyEmail: "Enter E-mail",
   emptyPassword: "Enter Password",
   wrong: "Wrong E-mail or Password",
 };
@@ -31,10 +33,11 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [showError, setShowError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const signIn = async (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
     e.preventDefault();
-
+    setLoading(true);
     if (email.length === 0) {
       setError(errorMessage.emptyEmail);
       setShowError(true);
@@ -56,6 +59,7 @@ const SignIn = () => {
         }
       }
     }
+    setLoading(false);
   };
 
   const signInWithGoogle = async () => {
@@ -80,15 +84,24 @@ const SignIn = () => {
         />
         <StyledSignInTitle>Sign in</StyledSignInTitle>
         <StyledSignIn>
-          <StyledInput
-            placeholder="E-mail"
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-          />
-          <StyledInput
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <StyledInputOrSpinner>
+            {loading ? (
+              <BeatLoader color={"rgb(0,6,68)"} />
+            ) : (
+              <>
+                <StyledInput
+                  placeholder="E-mail"
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                />
+                <StyledInput
+                  placeholder="Password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="password"
+                />
+              </>
+            )}
+          </StyledInputOrSpinner>
           <StyledSubmitForm type="submit" onClick={(e) => signIn(e)} />
           <div>Or login with</div>
           <StyledWithGoogle onClick={signInWithGoogle}>

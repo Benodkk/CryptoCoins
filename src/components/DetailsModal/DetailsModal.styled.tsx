@@ -20,63 +20,66 @@ export const StyledModal = styled.div`
   min-width: 500px;
   padding: 20px;
   border-radius: 20px;
-  font-weight: 700;
+  /* font-weight: 700; */
+  gap: 15px;
 `;
 
 export const StyledModalHeadRow = styled.div`
   display: flex;
   justify-content: space-between;
-`;
-
-export const StyledLogoRow = styled.div`
-  align-self: center;
-  display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 24px;
   font-weight: 700;
-  margin: 10px 0 20px;
-  img {
-    width: 40px;
-  }
 `;
-export const StyledActionRow = styled.div`
+
+export const StyledHeadInfo = styled.div`
   display: flex;
-  justify-content: space-between;
-`;
-
-export const StyledActionCol = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  row-gap: 10px;
-  align-items: center;
-`;
-
-export const StyledInput = styled.input`
-  padding: 8px;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  font-family: Arial, Helvetica, sans-serif;
-  &:focus {
-    background-color: ${(props) => props.theme.colors.interaction};
-  }
-`;
-
-export const StyledButtonsCol = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 10px;
+  img {
+    max-height: 40px;
+  }
 `;
 
-export const StyledActionButton = styled.button`
+export const StyledCoinSymbol = styled.div`
+  font-weight: 500;
+`;
+
+export const StyledRow = styled.div`
+  display: flex;
+  gap: 20px;
+`;
+
+export const StyledPriceContainer = styled.div`
+  display: flex;
+  gap: 5px;
+`;
+
+export const StyledLabel = styled.label`
+  font-weight: 700;
+`;
+
+interface StyledPriceProps {
+  positive: boolean;
+}
+
+export const StyledPrice = styled.div<StyledPriceProps>`
+  font-weight: 700;
+  /* color: rgb(0, 53, 0) */
+  color: ${({ positive }) => (positive ? "rgb(0, 220, 0)" : "red")};
+`;
+
+export const StyledButtonRow = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+export const StyledTransactionButton = styled.button`
   background-color: #ffffff;
+  justify-content: center;
   border: none;
-  width: 80px;
-  height: 40px;
+  padding: 5px 10px;
   border-radius: 8px;
+  font-size: 16px;
   cursor: pointer;
   font-weight: 600;
   transition: 0.2s;
@@ -85,14 +88,6 @@ export const StyledActionButton = styled.button`
   }
   &:active {
     background-color: ${(props) => props.theme.colors.interaction};
-    transform: scale(0.9);
-  }
-`;
-
-export const CloseButton = styled.img`
-  transition: 0.2s;
-  cursor: pointer;
-  &:hover {
     transform: scale(0.9);
   }
 `;

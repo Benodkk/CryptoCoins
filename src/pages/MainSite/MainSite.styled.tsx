@@ -75,6 +75,10 @@ export const StyledOneTrandingCoin = styled.div`
   border: 3px solid white;
   border-radius: 10px;
   font-weight: 700;
+  cursor: pointer;
+  &:hover {
+    background-color: rgb(4, 7, 46);
+  }
 `;
 
 // Market Update
