@@ -1,6 +1,11 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+
+import { auth } from "../../config/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+
+import Search from "../Search";
+
 import {
   StyledHeader,
   StyledHeaderContainer,
@@ -8,15 +13,14 @@ import {
   StyledMenu,
   StyledNavigate,
 } from "./Header.styled";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../../config/firebase";
-import Search from "../Search";
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
   const [scroll, setScroll] = useState(window.scrollY);
   const [search, setSearch] = useState(false);
+  const [loged, setLoged] = useState(false);
 
   useEffect(() => {
     function handleScroll() {
@@ -34,6 +38,17 @@ const Header = () => {
     }
   };
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setLoged(true);
+      } else {
+        setLoged(false);
+      }
+    });
+    return unsubscribe;
+  }, [auth]);
+
   return (
     <StyledHeaderContainer scroll={scroll > 100}>
       <StyledHeader>
@@ -47,15 +62,9 @@ const Header = () => {
               changeSite(auth.currentUser ? "/profile" : "/sign_in")
             }
           >
-            {auth.currentUser ? "Profile" : "Sign in"}
+            {loged ? "Profile" : "Sign In"}
           </StyledNavigate>
-          {search ? (
-            <Search setSearch={setSearch} />
-          ) : (
-            <StyledNavigate onClick={() => setSearch(true)}>
-              Search
-            </StyledNavigate>
-          )}
+          <Search setSearch={setSearch} search={search} />
         </StyledMenu>
       </StyledHeader>
     </StyledHeaderContainer>

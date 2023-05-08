@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { StyledTabsContainer, StyledTabButton } from "./Profile.styled";
 
 interface Props {

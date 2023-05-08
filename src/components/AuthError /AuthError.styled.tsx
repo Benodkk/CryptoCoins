@@ -22,12 +22,11 @@ export const StyledErrorContainer = styled.div<Props>`
 
 export const StyledCloseBtn = styled.button`
   background-color: rgba(0, 0, 0, 0);
-  font-size: 2.5rem;
   border: none;
   justify-self: flex-end;
   cursor: pointer;
-`;
-
-export const StyledError = styled.div`
-  /* grid-column: 1/3; */
+  img {
+    height: 32px;
+    color: black;
+  }
 `;

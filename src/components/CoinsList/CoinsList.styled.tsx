@@ -18,6 +18,8 @@ export const StyledListHeader = styled.div`
   font-weight: 700;
 `;
 
+// One coin
+
 export const StyledOneCoin = styled.div`
   display: grid;
   align-items: center;
@@ -28,8 +30,9 @@ export const StyledOneCoin = styled.div`
   padding: 10px 0;
   font-weight: 700;
   border-top: 1px solid white;
+  cursor: pointer;
   &:hover {
-    background-color: rgb(4, 7, 46);
+    background-color: ${(props) => props.theme.colors.hoverDark};
   }
   img {
     width: 40px;

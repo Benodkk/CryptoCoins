@@ -6,10 +6,10 @@ export const StyledMainContainer = styled.div`
   align-items: center;
   padding: 80px 0 40px;
   background: linear-gradient(
-    rgb(49, 43, 182),
-    rgb(0, 6, 68),
-    rgb(0, 6, 68),
-    rgb(0, 6, 68)
+    ${(props) => props.theme.colors.backgroundSecond},
+    ${(props) => props.theme.colors.background},
+    ${(props) => props.theme.colors.background},
+    ${(props) => props.theme.colors.background}
   );
 `;
 export const StyledSectionName = styled.h2`

@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { BeatLoader } from "react-spinners";
 
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-
 import { auth, googleProvider } from "../../config/firebase";
+
 import googleIcon from "../../assets/google.png";
-import Error from "../../components/Error";
+
+import AuthError from "../../components/AuthError ";
 
 import {
   StyledInput,
@@ -18,8 +21,6 @@ import {
   StyledSignUpNavigate,
   StyledInputOrSpinner,
 } from "./SingIn.styled";
-import { useNavigate } from "react-router-dom";
-import { BeatLoader } from "react-spinners";
 
 const errorMessage = {
   emptyEmail: "Enter E-mail",
@@ -77,7 +78,7 @@ const SignIn = () => {
   return (
     <StyledSignInContainer>
       <StyledSignInForm>
-        <Error
+        <AuthError
           error={error}
           showError={showError}
           setShowError={setShowError}

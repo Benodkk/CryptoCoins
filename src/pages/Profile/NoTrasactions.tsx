@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+
 import { StyledNoTransactions } from "./Profile.styled";
 
 const NoTrasactions = () => {

@@ -7,11 +7,13 @@ export const StyledModalContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(4, 7, 46, 0.8);
+  background-color: ${(props) => props.theme.colors.backgroundTransparent};
   z-index: 3;
   width: 100vw;
   height: 100vh;
 `;
+
+// RenderModal
 
 export const StyledModal = styled.div`
   display: flex;
@@ -20,7 +22,6 @@ export const StyledModal = styled.div`
   min-width: 500px;
   padding: 20px;
   border-radius: 20px;
-  /* font-weight: 700; */
   gap: 15px;
 `;
 
@@ -64,7 +65,6 @@ interface StyledPriceProps {
 
 export const StyledPrice = styled.div<StyledPriceProps>`
   font-weight: 700;
-  /* color: rgb(0, 53, 0) */
   color: ${({ positive }) => (positive ? "rgb(0, 220, 0)" : "red")};
 `;
 
@@ -74,7 +74,7 @@ export const StyledButtonRow = styled.div`
 `;
 
 export const StyledTransactionButton = styled.button`
-  background-color: #ffffff;
+  background-color: ${(props) => props.theme.colors.main};
   justify-content: center;
   border: none;
   padding: 5px 10px;

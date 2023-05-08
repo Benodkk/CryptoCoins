@@ -6,7 +6,11 @@ export const StyledSignInContainer = styled.div`
   justify-content: center;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(rgb(49, 43, 182), rgb(0, 6, 68), rgb(0, 6, 68));
+  background: linear-gradient(
+    ${(props) => props.theme.colors.backgroundSecond},
+    ${(props) => props.theme.colors.background},
+    ${(props) => props.theme.colors.background}
+  );
 `;
 
 export const StyledSignInForm = styled.form`
@@ -69,7 +73,7 @@ export const StyledInput = styled.input`
   font-weight: 600;
   height: 40px;
   font-family: Arial, Helvetica, sans-serif;
-  box-shadow: rgb(101, 67, 250) 0px 2px 4px 0px;
+  box-shadow: ${(props) => props.theme.boxShadow.purple};
   &:focus {
     outline: none;
     background-color: ${(props) => props.theme.colors.interaction};
@@ -86,7 +90,7 @@ export const StyledSubmitForm = styled.input`
   font-size: 18px;
   font-weight: 600;
   transition: 0.2s;
-  box-shadow: rgb(101, 67, 250) 0px 2px 4px 0px;
+  box-shadow: ${(props) => props.theme.boxShadow.purple};
   &:hover {
     background-color: ${(props) => props.theme.colors.interaction};
   }
@@ -109,7 +113,7 @@ export const StyledWithGoogle = styled.button`
   font-size: 18px;
   font-weight: 600;
   transition: 0.2s;
-  box-shadow: rgb(101, 67, 250) 0px 2px 4px 0px;
+  box-shadow: ${(props) => props.theme.boxShadow.purple};
   &:hover {
     background-color: ${(props) => props.theme.colors.interaction};
   }
@@ -132,7 +136,7 @@ export const StyledSignUp = styled.div`
 export const StyledSignUpNavigate = styled.div`
   cursor: pointer;
   transition: 0.2s;
-  color: rgb(49, 43, 182);
+  color: ${(props) => props.theme.colors.backgroundSecond};
   &:hover {
     transform: translateY(2px);
     text-shadow: 0.4px 0.4px 1px rgb(101, 67, 250);

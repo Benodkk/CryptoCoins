@@ -17,13 +17,23 @@ export const StyledSectionName = styled.h2`
 export const StyledWelcomePageSection = styled.section`
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   width: 100%;
-  padding: 50px 25vw 0;
+  padding: 50px 0 0;
   height: 50vh;
   text-shadow: 1px 1px 2px rgba(48, 45, 45, 0.5);
   font-weight: 700;
-  background: linear-gradient(rgb(49, 43, 182), rgb(0, 6, 68));
+  background: linear-gradient(
+    ${(props) => props.theme.colors.backgroundSecond},
+    ${(props) => props.theme.colors.background}
+  );
+`;
+
+export const StyledWelcomeSignContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  min-width: 1024px;
 `;
 
 export const StyledWelcomeSign = styled.h2`
@@ -77,7 +87,7 @@ export const StyledOneTrandingCoin = styled.div`
   font-weight: 700;
   cursor: pointer;
   &:hover {
-    background-color: rgb(4, 7, 46);
+    background-color: ${(props) => props.theme.colors.hoverDark};
   }
 `;
 

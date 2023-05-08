@@ -1,27 +1,17 @@
 import { useState } from "react";
+
+import TransactionModal from "../TransactionModal";
+import DetailsModal from "../DetailsModal";
+import OneCoin from "./OneCoin";
+
+import { CoinDetails } from "./interfaces";
+
 import {
-  StyledChangeDiv,
   StyledImgWithName,
   StyledListHeader,
   StyledMarketList,
-  StyledOneCoin,
-  StyledSymbol,
   StyledToRightDiv,
-  StyledTransactionButton,
 } from "./CoinsList.styled";
-
-import TransactionModal from "../TransactionModal";
-
-interface CoinDetails {
-  id: string;
-  image: string;
-  name: string;
-  symbol: string;
-  current_price: number;
-  price_change_percentage_24h: number;
-  market_cap: number;
-  market_cap_rank: number;
-}
 
 interface Props {
   coins: CoinDetails[];
@@ -29,6 +19,7 @@ interface Props {
 
 const CoinsList = ({ coins }: Props) => {
   const [addTransaction, setAddTransaction] = useState<string | null>(null);
+  const [showDetails, setShowDetails] = useState<string | null>(null);
 
   return (
     <>
@@ -40,44 +31,27 @@ const CoinsList = ({ coins }: Props) => {
           <div>24h change</div>
           <StyledToRightDiv>Market Cap</StyledToRightDiv>
         </StyledListHeader>
-        {coins ? (
-          coins.map((coin) => {
-            return (
-              <StyledOneCoin key={coin.id}>
-                <div>{coin.market_cap_rank}</div>
-                <StyledImgWithName>
-                  <img src={coin.image} />
-                  <div>{coin.name}</div>
-                  <StyledSymbol>{coin.symbol.toUpperCase()}</StyledSymbol>
-                </StyledImgWithName>
-                <StyledToRightDiv>
-                  ${coin.current_price.toLocaleString("en-US")}
-                </StyledToRightDiv>
-                <StyledChangeDiv
-                  positive={coin.price_change_percentage_24h > 0}
-                >
-                  {(coin.price_change_percentage_24h > 0 ? "+" : "") +
-                    coin.price_change_percentage_24h.toFixed(2)}
-                  %
-                </StyledChangeDiv>
-                <StyledToRightDiv>
-                  ${coin.market_cap.toLocaleString("en-US")}
-                </StyledToRightDiv>
-                <StyledTransactionButton
-                  onClick={() => setAddTransaction(coin.id)}
-                >
-                  Add transaction
-                </StyledTransactionButton>
-              </StyledOneCoin>
-            );
-          })
-        ) : (
-          <></>
-        )}
+        {coins.map((coin) => {
+          return (
+            <OneCoin
+              key={coin.id}
+              coin={coin}
+              setAddTransaction={setAddTransaction}
+              setShowDetails={setShowDetails}
+            />
+          );
+        })}
       </StyledMarketList>
       {addTransaction && (
         <TransactionModal
           coinId={addTransaction}
+          setAddTransaction={setAddTransaction}
+        />
+      )}
+      {showDetails && (
+        <DetailsModal
+          setShowDetails={setShowDetails}
+          coinId={showDetails}
           setAddTransaction={setAddTransaction}
         />
       )}

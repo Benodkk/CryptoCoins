@@ -11,7 +11,10 @@ export const StyledMainContainer = styled.div`
 
 export const StyledOverviewContainer = styled.section`
   width: 100%;
-  background: linear-gradient(rgb(49, 43, 182), rgb(0, 6, 68));
+  background: linear-gradient(
+    ${(props) => props.theme.colors.backgroundSecond},
+    ${(props) => props.theme.colors.background}
+  );
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,13 +22,19 @@ export const StyledOverviewContainer = styled.section`
 
 export const StyledOverview = styled.section`
   margin-top: 70px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
   position: relative;
   align-items: center;
   justify-content: center;
   width: 1024px;
   height: 50vh;
+`;
+
+export const StyledStatsContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  justify-content: center;
   gap: 50px;
 `;
 
@@ -134,8 +143,11 @@ export const StyledOneTransaction = styled.tr`
   gap: 15px;
   padding: 10px 0;
   border-bottom: 1px solid white;
+  td {
+    text-align: center;
+  }
   &:hover {
-    background-color: rgb(4, 7, 46);
+    background-color: ${(props) => props.theme.colors.hoverDark};
   }
   &:last-child {
     border-bottom: none;
@@ -236,7 +248,7 @@ export const StyledCoinsRow = styled.tr`
   height: 50px;
   border-bottom: 1px solid white;
   &:hover {
-    background-color: rgb(4, 7, 46);
+    background-color: ${(props) => props.theme.colors.hoverDark};
   }
   td {
     display: flex;
@@ -270,8 +282,10 @@ export const StyledSwitchButton = styled.button<SwitchButtonProps>`
   font-weight: 500;
   padding: 8px;
   border: none;
-  color: ${({ selected }) => (!selected ? "white" : "rgb(0,6,68)")};
-  background-color: ${({ selected }) => (!selected ? "rgb(0,6,68)" : "white")};
+  color: ${({ selected }) =>
+    !selected ? "white" : (props) => props.theme.colors.background};
+  background-color: ${({ selected }) =>
+    !selected ? (props) => props.theme.colors.background : "white"};
   cursor: pointer;
   &:hover {
     color: rgb(0, 6, 68);

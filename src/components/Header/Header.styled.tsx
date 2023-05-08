@@ -10,9 +10,10 @@ export const StyledHeaderContainer = styled.header<HeaderProps>`
   position: fixed;
   width: 100%;
   z-index: 2;
-  background-color: ${({ scroll }) => (scroll ? "rgb(0, 6, 68)" : "none")};
+  background-color: ${({ scroll }) =>
+    scroll ? (props) => props.theme.colors.background : "none"};
   box-shadow: ${({ scroll }) =>
-    scroll ? "2px 2px 5px rgb(15, 16, 32)" : "none"};
+    scroll ? (props) => props.theme.boxShadow.dark : "none"};
   transition: 0.3s;
   top: 0;
 `;

@@ -4,19 +4,21 @@ interface Props {
   active: boolean;
 }
 
-export const StyledBomba = styled.div<Props>`
+export const StyledSearchContainer = styled.div<Props>`
   position: absolute;
   display: flex;
   flex-direction: column;
   width: 200%;
-  background-color: rgb(0, 6, 68);
+  background-color: ${(props) => props.theme.colors.background};
   align-self: flex-start;
   justify-self: flex-end;
   padding: 15px 0 10px;
   left: -100%;
   color: white;
-  box-shadow: 2px 2px 5px 2px rgb(15, 16, 32);
+  box-shadow: ${(props) => props.theme.boxShadow.dark};
   transition: 0.5s;
+  z-index: 1;
+  visibility: ${({ active }) => (active ? "visible" : "hidden")};
   transform: ${({ active }) =>
     active ? "translateY(-15px)" : "translateY(-130%)"};
 `;
@@ -47,7 +49,7 @@ export const StyledSearchResult = styled.div`
   padding-top: 10px;
 `;
 
-export const StyledSymbole = styled.div`
+export const StyledSymbol = styled.div`
   font-weight: 500;
 `;
 
@@ -58,7 +60,7 @@ export const StyledOneResult = styled.div`
   padding: 5px 15px;
   cursor: pointer;
   &:hover {
-    background-color: rgb(4, 7, 46);
+    background-color: ${(props) => props.theme.colors.hoverDark};
   }
 `;
 

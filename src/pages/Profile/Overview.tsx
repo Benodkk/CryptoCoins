@@ -1,6 +1,13 @@
-import { collection, getDocs } from "firebase/firestore";
-import { db, auth } from "../../config/firebase";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+
+import { BeatLoader } from "react-spinners";
+
+import { signOut } from "firebase/auth";
+import { auth } from "../../config/firebase";
+
+import { PortfolioValue } from "./interfaces";
+
 import {
   StyledLogOut,
   StyledLogOutContainer,
@@ -8,18 +15,11 @@ import {
   StyledOneStatValue,
   StyledOverview,
   StyledOverviewContainer,
+  StyledStatsContainer,
 } from "./Profile.styled";
-import { signOut } from "firebase/auth";
-import { useNavigate } from "react-router";
-import { BeatLoader } from "react-spinners";
 
 interface OverviewProps {
-  portfolioValue:
-    | {
-        profit: number;
-        coinsValue: number;
-      }
-    | undefined;
+  portfolioValue?: PortfolioValue;
 }
 
 const Overview = ({ portfolioValue }: OverviewProps) => {
@@ -62,17 +62,17 @@ const Overview = ({ portfolioValue }: OverviewProps) => {
           </StyledLogOut>
         </StyledLogOutContainer>
         {portfolioValue ? (
-          <>
+          <StyledStatsContainer>
             <StyledOneStatContainer>
               <div>Transactions profit</div>
               <StyledOneStatValue positive={portfolioValue.profit > 0}>
-                {portfolioValue.profit.toFixed(2)}
+                {Number(portfolioValue.profit.toFixed(2)).toLocaleString()}$
               </StyledOneStatValue>
             </StyledOneStatContainer>
             <StyledOneStatContainer>
               <div>Portfolio value</div>
               <StyledOneStatValue positive={portfolioValue.coinsValue > 0}>
-                {portfolioValue.coinsValue.toFixed(2)}
+                {Number(portfolioValue.coinsValue.toFixed(2)).toLocaleString()}$
               </StyledOneStatValue>
             </StyledOneStatContainer>
             <StyledOneStatContainer>
@@ -80,12 +80,15 @@ const Overview = ({ portfolioValue }: OverviewProps) => {
               <StyledOneStatValue
                 positive={portfolioValue.profit + portfolioValue.coinsValue > 0}
               >
-                {(portfolioValue.profit + portfolioValue.coinsValue).toFixed(2)}
+                {Number(
+                  (portfolioValue.profit + portfolioValue.coinsValue).toFixed(2)
+                ).toLocaleString()}
+                $
               </StyledOneStatValue>
             </StyledOneStatContainer>
-          </>
+          </StyledStatsContainer>
         ) : (
-          <></>
+          <BeatLoader color={"#ffffff"} />
         )}
       </StyledOverview>
     </StyledOverviewContainer>

@@ -1,12 +1,20 @@
-import { StyledCloseButton } from "./CloseButton.styled";
 import close from "../../assets/close.png";
+import closeBlack from "../../assets/close-black.png";
+
+import { StyledCloseButton } from "./CloseButton.styled";
 
 interface Props {
-  onClick: any;
+  onClick: React.MouseEventHandler<HTMLImageElement>;
+  color?: string;
 }
 
-const CloseButton = ({ onClick }: Props) => {
-  return <StyledCloseButton onClick={onClick} src={close} />;
+const CloseButton = ({ onClick, color }: Props) => {
+  return (
+    <StyledCloseButton
+      onClick={onClick}
+      src={color === "black" ? closeBlack : close}
+    />
+  );
 };
 
 export default CloseButton;

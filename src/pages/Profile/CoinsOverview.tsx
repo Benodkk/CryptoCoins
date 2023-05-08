@@ -1,51 +1,22 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+
+import { BeatLoader } from "react-spinners";
+
 import { db, auth } from "../../config/firebase";
 import { collection, getDocs } from "firebase/firestore";
-import {
-  StyledCoinsBottomHeader,
-  StyledCoinsOverview,
-  StyledCoinsRow,
-  StyledCoinsTopHeader,
-} from "./Profile.styled";
-import SwitchListPage from "./SwitchListPage";
-import useRoundNr from "../../hooks/useRoundNr";
+
+import { CoinsSummary, Transaction, PortfolioValue } from "./interfaces";
+
 import NoTrasactions from "./NoTrasactions";
+import CoinsOverviewRender from "./CoinsOverviewRender";
 
-interface CoinsSummary {
-  name: string;
-  currentPrice: number;
-  transactionsBuy: number;
-  transactionsSell: number;
-  averageBuyPrice: number;
-  averageSellPrice: number;
-  totalMoneyInvested: number;
-  totalMoneyWithdraw: number;
-  profit: number;
-  amount: number;
-  currentPortfolioValue: number;
-}
-
-interface Transaction {
-  name: string;
-  amount: number;
-  coinId: string;
-  date: string;
-  id: string;
-  price: number;
-  type: string;
-}
+import { StyledCoinsOverview } from "./Profile.styled";
 
 interface SortedCoins {
   [x: string]: {
     transactions: Transaction[];
     currentPrice: number;
   };
-}
-
-interface PortfolioValue {
-  profit: number;
-  coinsValue: number;
 }
 
 interface Props {
@@ -55,11 +26,13 @@ interface Props {
 }
 
 const CoinsOverview = ({ setPortfolioValue }: Props) => {
-  const user = auth.currentUser?.uid;
   const [coinsSummary, setCoinsSummary] = useState<CoinsSummary[]>([]);
-  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+
+  const user = auth.currentUser?.uid;
 
   const getCoinsList = async () => {
+    setLoading(true);
     let coins: CoinsSummary[] = [];
 
     const transactionsColletionRef = collection(
@@ -125,26 +98,26 @@ const CoinsOverview = ({ setPortfolioValue }: Props) => {
             sell.sumOfAmounts += coin.amount;
           }
         });
-
         const coin = {
           name: groupedData[id].transactions[0].name,
           currentPrice: groupedData[id].currentPrice,
-          transactionsBuy: useRoundNr(buy.count),
-          transactionsSell: useRoundNr(sell.count),
-          averageBuyPrice: useRoundNr(buy.sumOfInvested / buy.sumOfAmounts),
-          averageSellPrice: useRoundNr(sell.sumOfInvested / sell.sumOfAmounts),
-          totalMoneyInvested: useRoundNr(buy.sumOfInvested),
-          totalMoneyWithdraw: useRoundNr(sell.sumOfInvested),
-          profit: useRoundNr(sell.sumOfInvested - buy.sumOfInvested),
-          amount: useRoundNr(buy.sumOfAmounts - sell.sumOfAmounts),
-          currentPortfolioValue: useRoundNr(
+          transactionsBuy: buy.count,
+          transactionsSell: sell.count,
+          averageBuyPrice: buy.count ? buy.sumOfInvested / buy.sumOfAmounts : 0,
+          averageSellPrice: sell.count
+            ? sell.sumOfInvested / sell.sumOfAmounts
+            : 0,
+          totalMoneyInvested: buy.sumOfInvested,
+          totalMoneyWithdraw: sell.sumOfInvested,
+          profit: sell.sumOfInvested - buy.sumOfInvested,
+          amount: buy.sumOfAmounts - sell.sumOfAmounts,
+          currentPortfolioValue:
             groupedData[id].currentPrice *
-              (buy.sumOfAmounts - sell.sumOfAmounts)
-          ),
+            (buy.sumOfAmounts - sell.sumOfAmounts),
         };
-
         coins.push(coin);
       }
+
       const profit = coins.reduce(
         (totalProfit, coin) => totalProfit + coin.profit,
         0
@@ -160,6 +133,8 @@ const CoinsOverview = ({ setPortfolioValue }: Props) => {
       setCoinsSummary(coins);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -169,61 +144,10 @@ const CoinsOverview = ({ setPortfolioValue }: Props) => {
 
   return (
     <StyledCoinsOverview>
-      {coinsSummary.length ? (
-        <>
-          <table>
-            <thead>
-              <StyledCoinsTopHeader>
-                <th>Coin</th>
-                <th>Current value</th>
-                <th>Transactions</th>
-                <th>Average price</th>
-                <th>All transacions value</th>
-                <th>Profit</th>
-                <th>Coins remaining</th>
-              </StyledCoinsTopHeader>
-              <StyledCoinsBottomHeader>
-                <th></th>
-                <th></th>
-                <th>buy</th>
-                <th>sell</th>
-                <th>buy</th>
-                <th>sell</th>
-                <th>buy</th>
-                <th>sell</th>
-                <th></th>
-                <th>Amount</th>
-                <th>Total value</th>
-              </StyledCoinsBottomHeader>
-            </thead>
-            <tbody>
-              {coinsSummary?.map((coin) => {
-                return (
-                  <StyledCoinsRow key={coin.name}>
-                    <td>{coin.name}</td>
-                    <td>{coin.currentPrice}</td>
-                    <td>{coin.transactionsBuy}</td>
-                    <td>{coin.transactionsSell}</td>
-                    <td>{coin.averageBuyPrice}</td>
-                    <td>
-                      {coin.averageSellPrice ? coin.averageSellPrice : "-"}
-                    </td>
-                    <td>{coin.totalMoneyInvested.toFixed(2)}</td>
-                    <td>{coin.totalMoneyWithdraw.toFixed(2)}</td>
-                    <td>{coin.profit.toFixed(2)}</td>
-                    <td>{coin.amount}</td>
-                    <td>{coin.currentPortfolioValue.toFixed(2)}</td>
-                  </StyledCoinsRow>
-                );
-              })}
-            </tbody>
-          </table>
-          <SwitchListPage
-            pages={Math.ceil(coinsSummary.length / 20)}
-            page_nr={page}
-            setPage={setPage}
-          />
-        </>
+      {loading ? (
+        <BeatLoader color="white" />
+      ) : coinsSummary.length ? (
+        <CoinsOverviewRender coinsSummary={coinsSummary} />
       ) : (
         <NoTrasactions />
       )}

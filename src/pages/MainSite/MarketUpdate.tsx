@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+import { BeatLoader } from "react-spinners";
+
 import CoinsList from "../../components/CoinsList";
+import FetchError from "../../components/FetchError";
+
 import {
   StyledButton,
   StyledMarketUpdateSection,
@@ -19,13 +24,15 @@ interface CoinDetails {
 }
 
 const MarketUpdate = () => {
-  const [coins, setCoins] = useState<CoinDetails[]>();
   const nav = useNavigate();
+  const [coins, setCoins] = useState<CoinDetails[]>();
+  const [loading, setLoading] = useState(true);
 
   const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=7&page=1&sparkline=false&locale=en`;
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await fetch(url);
         const fetchedData = await response.json();
@@ -33,6 +40,7 @@ const MarketUpdate = () => {
       } catch (err) {
         console.error(err);
       }
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -40,7 +48,13 @@ const MarketUpdate = () => {
   return (
     <StyledMarketUpdateSection>
       <StyledSectionName>Martket update</StyledSectionName>
-      {coins ? <CoinsList coins={coins} /> : <></>}
+      {loading ? (
+        <BeatLoader color={"#ffffff"} />
+      ) : coins ? (
+        <CoinsList coins={coins} />
+      ) : (
+        <FetchError />
+      )}
       <StyledButton onClick={() => nav("/market/1")}>
         Check whole list!
       </StyledButton>

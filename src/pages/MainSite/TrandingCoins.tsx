@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
+
+import { BeatLoader } from "react-spinners";
+
 import DetailsModal from "../../components/DetailsModal";
+import FetchError from "../../components/FetchError";
 import TransactionModal from "../../components/TransactionModal";
+
 import {
   StyledOneTrandingCoin,
   StyledSectionName,
@@ -19,19 +24,24 @@ interface CoinDetails {
 }
 
 const TrandingCoins = () => {
-  const [coins, setCoins] = useState<CoinDetails[]>();
+  const [coins, setCoins] = useState<CoinDetails[] | null>(null);
   const [showDetails, setShowDetails] = useState<null | string>(null);
   const [addTransaction, setAddTransaction] = useState<null | string>(null);
+  const [loading, setLoading] = useState(true);
 
   const url = "https://api.coingecko.com/api/v3/search/trending";
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await fetch(url);
         const fetchedData = await response.json();
         setCoins(fetchedData.coins.slice(0, 6));
-      } catch (err) {}
+      } catch (err) {
+        console.error(err);
+      }
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -39,9 +49,11 @@ const TrandingCoins = () => {
   return (
     <StyledTrandingCoinsSection>
       <StyledSectionName>Trending Coins</StyledSectionName>
-      <StyledTrandingCoins>
-        {coins ? (
-          coins.map((coin) => {
+      {loading ? (
+        <BeatLoader color={"#ffffff"} />
+      ) : coins ? (
+        <StyledTrandingCoins>
+          {coins.map((coin) => {
             return (
               <StyledOneTrandingCoin
                 key={coin.item.id}
@@ -52,11 +64,11 @@ const TrandingCoins = () => {
                 <div>#Rank: {coin.item.market_cap_rank}</div>
               </StyledOneTrandingCoin>
             );
-          })
-        ) : (
-          <></>
-        )}
-      </StyledTrandingCoins>
+          })}
+        </StyledTrandingCoins>
+      ) : (
+        <FetchError />
+      )}
       {showDetails && (
         <DetailsModal
           setAddTransaction={setAddTransaction}

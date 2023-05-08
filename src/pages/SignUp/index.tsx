@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
+import { BeatLoader } from "react-spinners";
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 
 import { auth } from "../../config/firebase";
-import Error from "../../components/Error";
+import AuthError from "../../components/AuthError ";
 
 import {
   StyledInput,
@@ -15,8 +17,6 @@ import {
   StyledSignUpTitle,
   StyledSubmitForm,
 } from "./SignUp.styled";
-import { useNavigate } from "react-router";
-import { BeatLoader } from "react-spinners";
 
 const errorMessage = {
   emptyEmail: "Enter Email",
@@ -76,7 +76,7 @@ const SignUp = () => {
   return (
     <StyledSignUpContainer>
       <StyledSignUpForm>
-        <Error
+        <AuthError
           error={error}
           showError={showError}
           setShowError={setShowError}

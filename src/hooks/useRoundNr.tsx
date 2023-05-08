@@ -1,22 +1,18 @@
 function useRoundNr(number: number) {
-  let nr: number;
-
-  const str = number.toString();
-  if (str.indexOf(".") !== -1) {
-    const parts = str.split(".");
-    const integerPart = parts[0];
-    let decimalPart = parts[1];
-
-    while (decimalPart.length > 0 && decimalPart.charAt(0) === "0") {
-      decimalPart = decimalPart.substr(1);
-    }
-
-    const result = parseFloat(`${integerPart}.${decimalPart}`).toPrecision(5);
-    nr = parseFloat(result);
+  let returnNumber: string;
+  let absNumber = Math.abs(number);
+  if (absNumber >= 1000) {
+    returnNumber = absNumber.toLocaleString();
   } else {
-    nr = parseFloat(number.toPrecision(5));
+    returnNumber = absNumber.toPrecision(5);
+    while (
+      (returnNumber.endsWith("0") || returnNumber.endsWith(".")) &&
+      returnNumber.indexOf(".") !== -1
+    ) {
+      returnNumber = returnNumber.substring(0, returnNumber.length - 1);
+    }
   }
-  return nr.toLocaleString();
+  return number > 0 ? returnNumber : `-${returnNumber}`;
 }
 
 export default useRoundNr;

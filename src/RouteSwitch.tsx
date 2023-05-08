@@ -9,7 +9,7 @@ import SignUp from "./pages/SignUp";
 const RouteSwitch = () => {
   return (
     <HashRouter>
-      {/* <Header /> */}
+      <Header />
       <Routes>
         <Route path="/" element={<MainSite />} />
         <Route path="/market/:page_nr" element={<MarketUpdate />} />

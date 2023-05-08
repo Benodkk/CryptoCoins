@@ -1,37 +1,40 @@
+import { useState, useEffect } from "react";
+
+import { BeatLoader } from "react-spinners";
+
+import CloseButton from "../CloseButton";
+import DetailsModal from "../DetailsModal";
+import TransactionModal from "../TransactionModal";
+import OneResult from "./OneResult";
+
+import { CoinDetails } from "./interfaces";
+
 import {
-  StyledBomba,
+  StyledSearchContainer,
   StyledInputContainer,
   StyledInputSearch,
-  StyledOneResult,
-  StyledOneResultDetails,
   StyledSearchResult,
 } from "./Search.styled";
-import { useState, useEffect } from "react";
 import { StyledNavigate } from "../Header/Header.styled";
-import { StyledSymbol } from "../CoinsList/CoinsList.styled";
-import CloseButton from "../CloseButton";
-
-interface CoinDetails {
-  id: string;
-  thumb: string;
-  name: string;
-  symbol: string;
-  market_cap_rank: number;
-}
 
 interface Props {
   setSearch: React.Dispatch<React.SetStateAction<boolean>>;
+  search: boolean;
 }
 
-const Search = ({ setSearch }: Props) => {
+const Search = ({ setSearch, search }: Props) => {
   const [data, setData] = useState<CoinDetails[]>();
   const [query, setQuery] = useState("");
   const [timer, setTimer] = useState<NodeJS.Timeout>();
+  const [addTransaction, setAddTransaction] = useState<string | null>(null);
+  const [showDetails, setShowDetails] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const url = `https://api.coingecko.com/api/v3/search?query=${query}`;
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await fetch(url);
         const fetchedData = await response.json();
@@ -39,6 +42,8 @@ const Search = ({ setSearch }: Props) => {
         console.log(fetchedData);
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
@@ -46,15 +51,17 @@ const Search = ({ setSearch }: Props) => {
 
   const runTimer = () => {
     const timeout = setTimeout(() => {
-      setSearch(false);
+      if (!showDetails && !addTransaction) {
+        setSearch(false);
+      }
     }, 3000);
     setTimer(timeout);
   };
 
   return (
     <>
-      <StyledBomba
-        active={data ? true : false}
+      <StyledSearchContainer
+        active={search}
         onMouseLeave={() => runTimer()}
         onMouseEnter={() => clearTimeout(timer)}
       >
@@ -68,21 +75,35 @@ const Search = ({ setSearch }: Props) => {
           <CloseButton onClick={() => setSearch(false)} />
         </StyledInputContainer>
         <StyledSearchResult>
-          {data?.map((coin) => {
-            return (
-              <StyledOneResult>
-                <StyledOneResultDetails>
-                  <img src={coin.thumb} />
-                  <div>{coin.name}</div>
-                  <StyledSymbol>{coin.symbol}</StyledSymbol>
-                </StyledOneResultDetails>
-                <div>#{coin.market_cap_rank}</div>
-              </StyledOneResult>
-            );
-          })}
+          {loading ? (
+            <BeatLoader color={"#ffffff"} />
+          ) : (
+            data?.map((coin) => {
+              return (
+                <OneResult
+                  key={coin.id}
+                  coin={coin}
+                  setShowDetails={setShowDetails}
+                />
+              );
+            })
+          )}
         </StyledSearchResult>
-      </StyledBomba>
-      <div>Search</div>
+      </StyledSearchContainer>
+      <StyledNavigate onClick={() => setSearch(true)}>Search</StyledNavigate>
+      {addTransaction && (
+        <TransactionModal
+          coinId={addTransaction}
+          setAddTransaction={setAddTransaction}
+        />
+      )}
+      {showDetails && (
+        <DetailsModal
+          setShowDetails={setShowDetails}
+          coinId={showDetails}
+          setAddTransaction={setAddTransaction}
+        />
+      )}
     </>
   );
 };

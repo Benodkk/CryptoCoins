@@ -7,7 +7,7 @@ export const StyledModalContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(4, 7, 46, 0.8);
+  background-color: ${(props) => props.theme.colors.backgroundTransparent};
   z-index: 3;
   width: 100vw;
   height: 100vh;
@@ -40,6 +40,7 @@ export const StyledLogoRow = styled.div`
     width: 40px;
   }
 `;
+
 export const StyledActionRow = styled.div`
   display: flex;
   justify-content: space-between;
@@ -67,7 +68,7 @@ export const StyledInput = styled.input`
     background-color: ${(props) => props.theme.colors.interaction};
   }
   :disabled {
-    background-color: rgb(201, 201, 201);
+    background-color: ${(props) => props.theme.colors.disabledInput};
   }
 `;
 
@@ -80,7 +81,7 @@ export const StyledButtonsCol = styled.div`
 `;
 
 export const StyledActionButton = styled.button`
-  background-color: #ffffff;
+  background-color: ${(props) => props.theme.colors.main};
   border: none;
   width: 80px;
   height: 40px;
