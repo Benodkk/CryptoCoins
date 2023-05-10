@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router";
+
 import useRoundNr from "../../hooks/useRoundNr";
+
+import { auth } from "../../config/firebase";
 
 import CloseButton from "../CloseButton";
 
@@ -23,6 +27,7 @@ interface Props {
   setAddTransaction: React.Dispatch<React.SetStateAction<string | null>>;
 }
 const RenderModal = ({ coin, setShowDetails, setAddTransaction }: Props) => {
+  const navigate = useNavigate();
   return (
     <StyledModal>
       <StyledModalHeadRow>
@@ -103,8 +108,9 @@ const RenderModal = ({ coin, setShowDetails, setAddTransaction }: Props) => {
       <StyledButtonRow>
         <StyledTransactionButton
           onClick={() => {
-            setShowDetails(null);
-            setAddTransaction(coin.id);
+            auth.currentUser
+              ? (setShowDetails(null), setAddTransaction(coin.id))
+              : navigate("/sign_in");
           }}
         >
           Add Transaction

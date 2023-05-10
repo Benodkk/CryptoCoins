@@ -1,3 +1,7 @@
+import { useNavigate } from "react-router";
+
+import { auth } from "../../config/firebase";
+
 import { CoinDetails } from "./interfaces";
 
 import { useMediaQuery } from "react-responsive";
@@ -18,6 +22,7 @@ interface Props {
 }
 
 const OneCoin = ({ coin, setShowDetails, setAddTransaction }: Props) => {
+  const navigate = useNavigate();
   return (
     <StyledOneCoin onClick={() => setShowDetails(coin.id)}>
       <div>{coin.market_cap_rank}</div>
@@ -40,8 +45,9 @@ const OneCoin = ({ coin, setShowDetails, setAddTransaction }: Props) => {
       {useMediaQuery(reactDevice.desktop) && (
         <StyledTransactionButton
           onClick={(e) => {
-            e.stopPropagation();
-            setAddTransaction(coin.id);
+            auth.currentUser
+              ? (e.stopPropagation(), setAddTransaction(coin.id))
+              : navigate("/sign_in");
           }}
         >
           Add Transaction
