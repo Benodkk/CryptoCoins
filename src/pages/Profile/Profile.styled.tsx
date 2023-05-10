@@ -1,10 +1,16 @@
 import styled from "styled-components";
+import { devices } from "../../styles/deviceWidth";
 
 export const StyledMainContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 40px;
+  padding-bottom: 10px;
+  min-height: calc(100vh - 54px);
+  @media ${devices.tablet} {
+    padding-bottom: 20px;
+    min-height: calc(100vh - 60px);
+  }
 `;
 
 // Overview
@@ -21,21 +27,34 @@ export const StyledOverviewContainer = styled.section`
 `;
 
 export const StyledOverview = styled.section`
-  margin-top: 70px;
+  margin-top: 48px;
   display: flex;
   position: relative;
   align-items: center;
   justify-content: center;
-  width: 1024px;
+  width: 100%;
   height: 50vh;
+  @media ${devices.tablet} {
+    margin-top: 60px;
+  }
+  @media ${devices.desktop} {
+    width: 1024px;
+    margin-top: 70px;
+  }
 `;
 
 export const StyledStatsContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(3, 1fr);
   align-items: center;
   justify-content: center;
-  gap: 50px;
+  gap: 20px;
+  @media ${devices.tablet} {
+    gap: 50px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+  }
 `;
 
 export const StyledOneStatContainer = styled.div`
@@ -44,7 +63,10 @@ export const StyledOneStatContainer = styled.div`
   align-items: center;
   gap: 8px;
   div {
-    font-size: 36px;
+    font-size: 24px;
+    @media ${devices.desktop} {
+      font-size: 36px;
+    }
   }
 `;
 
@@ -55,7 +77,7 @@ interface StyledLogOutProps {
 export const StyledLogOutContainer = styled.div<StyledLogOutProps>`
   position: absolute;
   top: 0;
-  right: 0;
+  right: 10px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -65,6 +87,9 @@ export const StyledLogOutContainer = styled.div<StyledLogOutProps>`
   font-weight: 500;
   strong {
     font-weight: 600;
+  }
+  @media ${devices.desktop} {
+    right: 0;
   }
 `;
 
@@ -88,7 +113,8 @@ export const StyledOneStatValue = styled.div<StyledOneStatValueProps>`
 // tabs
 
 export const StyledTabsContainer = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 `;
 
@@ -97,166 +123,24 @@ interface StyledTabButtonProps {
 }
 
 export const StyledTabButton = styled.button<StyledTabButtonProps>`
-  font-size: 20px;
+  font-size: 14px;
   background-color: transparent;
   color: white;
   border: none;
   font-weight: 600;
-  width: 220px;
   padding: 10px 10px 10px;
   border-bottom: ${({ active }) =>
     active ? "2px solid blue" : "2px solid white"};
   transition: 0.2s;
   cursor: pointer;
-  &:hover {
-    padding: 13px 10px 7px;
-    text-shadow: 0.4px 0.4px 1px white;
+  @media ${devices.tablet} {
+    font-size: 20px;
   }
-`;
-// transaction history
-
-export const StyledTransactionHistory = styled.div`
-  margin: 50px 0 50px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 1024px;
-`;
-
-export const StyledTransactionsHeader = styled.tr`
-  display: grid;
-  align-items: center;
-  justify-items: center;
-  grid-template-columns: repeat(7, 1fr);
-  width: 1024px;
-  gap: 15px;
-  padding: 10px 0;
-  border-bottom: 1px solid white;
-`;
-
-export const StyledOneTransaction = styled.tr`
-  display: grid;
-  align-items: center;
-  justify-items: center;
-  grid-template-columns: repeat(7, 1fr);
-  width: 1024px;
-  gap: 15px;
-  padding: 10px 0;
-  border-bottom: 1px solid white;
-  td {
-    text-align: center;
-  }
-  &:hover {
-    background-color: ${(props) => props.theme.colors.hoverDark};
-  }
-  &:last-child {
-    border-bottom: none;
-  }
-`;
-
-interface StyledChangeTdProps {
-  buy: boolean;
-}
-
-export const StyledChangeTd = styled.td<StyledChangeTdProps>`
-  color: ${({ buy }) => (buy ? "green" : "red")};
-`;
-
-export const StyledButtonsContainer = styled.td`
-  display: flex;
-  gap: 5px;
-`;
-
-export const StyledButton = styled.button`
-  background-color: #ffffff;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.2s;
-  &:hover {
-    background-color: ${(props) => props.theme.colors.interaction};
-  }
-  &:active {
-    background-color: ${(props) => props.theme.colors.interaction};
-    transform: scale(0.9);
-  }
-`;
-
-// Coins overview
-
-export const StyledCoinsOverview = styled.div`
-  margin: 50px 0 50px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 1024px;
-`;
-
-export const StyledCoinsTopHeader = styled.tr`
-  display: grid;
-  align-items: center;
-  justify-items: center;
-  grid-template-columns: 1fr 1fr 2fr 2fr 2fr 1fr 2fr;
-  text-align: center;
-  width: 1024px;
-  height: 50px;
-  th {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    border-left: white 1px solid;
-    padding: 0 5px;
-    &:last-child {
-      border-right: white 1px solid;
+  @media ${devices.desktop} {
+    &:hover {
+      padding: 13px 10px 7px;
+      text-shadow: 0.4px 0.4px 1px white;
     }
-  }
-`;
-
-export const StyledCoinsBottomHeader = styled.tr`
-  display: grid;
-  align-items: center;
-  justify-items: center;
-  grid-template-columns: repeat(11, 1fr);
-  text-align: center;
-  width: 1024px;
-  height: 50px;
-  border-bottom: 1px solid white;
-  th {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    border-left: white 1px solid;
-    &:last-child {
-      border-right: white 1px solid;
-    }
-  }
-`;
-
-export const StyledCoinsRow = styled.tr`
-  display: grid;
-  align-items: center;
-  justify-items: center;
-  grid-template-columns: repeat(11, 1fr);
-  text-align: center;
-  width: 1024px;
-  height: 50px;
-  border-bottom: 1px solid white;
-  &:hover {
-    background-color: ${(props) => props.theme.colors.hoverDark};
-  }
-  td {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    font-size: 16px;
   }
 `;
 
@@ -269,8 +153,12 @@ interface SwitchButtonsContainerProps {
 export const StyledSwitchButtonsContainer = styled.div<SwitchButtonsContainerProps>`
   display: ${({ show }) => (show ? "flex" : "none")};
   align-items: center;
-  gap: 10px;
-  padding: 30px 0;
+  gap: 5px;
+  padding: 15px 0;
+  @media ${devices.desktop} {
+    gap: 10px;
+    padding: 30px 0;
+  }
 `;
 
 interface SwitchButtonProps {
@@ -278,29 +166,35 @@ interface SwitchButtonProps {
 }
 
 export const StyledSwitchButton = styled.button<SwitchButtonProps>`
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 500;
-  padding: 8px;
+  padding: 6px;
   border: none;
-  color: ${({ selected }) =>
-    !selected ? "white" : (props) => props.theme.colors.background};
-  background-color: ${({ selected }) =>
-    !selected ? (props) => props.theme.colors.background : "white"};
+  color: ${({ selected }) => (!selected ? "white" : "rgb(0,6,68)")};
+  background-color: ${({ selected }) => (!selected ? "rgb(0,6,68)" : "white")};
   cursor: pointer;
   &:hover {
     color: rgb(0, 6, 68);
     background-color: white;
+  }
+  @media ${devices.tablet} {
+    font-size: 24px;
+    padding: 8px;
   }
 `;
 
 // No transactions
 
 export const StyledNoTransactions = styled.div`
-  font-size: 36px;
+  font-size: 24px;
   cursor: pointer;
   transition: 0.2s;
+  text-align: center;
   &:hover {
     transform: translateY(2px);
     text-shadow: 0.4px 0.4px 1px white;
+  }
+  @media ${devices.tablet} {
+    font-size: 36px;
   }
 `;

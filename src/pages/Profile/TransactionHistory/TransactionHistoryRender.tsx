@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-import useRoundNr from "../../hooks/useRoundNr";
+import useRoundNr from "../../../hooks/useRoundNr";
 
-import SwitchListPage from "./SwitchListPage";
+import SwitchListPage from "../SwitchListPage";
 
-import { Transaction } from "./interfaces";
+import { Transaction } from "../interfaces";
 
 import {
   StyledButton,
@@ -12,7 +12,7 @@ import {
   StyledChangeTd,
   StyledOneTransaction,
   StyledTransactionsHeader,
-} from "./Profile.styled";
+} from "./TransactionHistory.styled";
 
 interface Props {
   transactions: Transaction[];
@@ -44,7 +44,7 @@ const TransactionHistoryRender = ({
         <tbody>
           {transactions.slice(20 * (page - 1), 20 * page).map((transaction) => {
             return (
-              <StyledOneTransaction>
+              <StyledOneTransaction key={transaction.id}>
                 <td>{transaction.name}</td>
                 <td>${useRoundNr(transaction.price)}</td>
                 <td>{useRoundNr(transaction.amount)}</td>

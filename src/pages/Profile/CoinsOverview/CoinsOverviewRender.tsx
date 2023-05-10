@@ -1,16 +1,16 @@
 import { useState } from "react";
 
-import useRoundNr from "../../hooks/useRoundNr";
+import useRoundNr from "../../../hooks/useRoundNr";
 
-import { CoinsSummary } from "./interfaces";
+import { CoinsSummary } from "../interfaces";
 
-import SwitchListPage from "./SwitchListPage";
+import SwitchListPage from "../SwitchListPage";
 
 import {
   StyledCoinsBottomHeader,
   StyledCoinsRow,
   StyledCoinsTopHeader,
-} from "./Profile.styled";
+} from "./CoinsOvertview.styled";
 
 interface Props {
   coinsSummary: CoinsSummary[];

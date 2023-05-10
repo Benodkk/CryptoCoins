@@ -39,7 +39,6 @@ const Search = ({ setSearch, search }: Props) => {
         const response = await fetch(url);
         const fetchedData = await response.json();
         setData(fetchedData.coins.slice(0, 6));
-        console.log(fetchedData);
       } catch (err) {
         console.error(err);
       } finally {

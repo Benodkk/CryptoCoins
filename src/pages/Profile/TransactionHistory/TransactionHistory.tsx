@@ -2,16 +2,19 @@ import { useEffect, useState } from "react";
 import { BeatLoader } from "react-spinners";
 
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
-import { db, auth } from "../../config/firebase";
+import { db, auth } from "../../../config/firebase";
 
-import NoTrasactions from "./NoTrasactions";
+import NoTrasactions from "../NoTrasactions";
 import TransactionHistoryRender from "./TransactionHistoryRender";
-import ChangeModal from "../../components/ChangeModal";
-import FetchError from "../../components/FetchError";
+import TransactionHistoryRenderMobile from "./TransactionHistoryRenderMobile";
+import ChangeModal from "../../../components/ChangeModal";
+import FetchError from "../../../components/FetchError";
 
-import { Transaction } from "./interfaces";
+import { Transaction } from "../interfaces";
 
-import { StyledTransactionHistory } from "./Profile.styled";
+import { StyledTransactionHistory } from "./TransactionHistory.styled";
+import { useMediaQuery } from "react-responsive";
+import { reactDevice } from "../../../styles/deviceWidth";
 
 const TransactionHistory = () => {
   const [transactions, setTransactions] = useState<Transaction[] | null>(null);
@@ -21,6 +24,7 @@ const TransactionHistory = () => {
   const [error, setError] = useState(false);
 
   const user = auth.currentUser?.uid;
+  const isTablet = useMediaQuery(reactDevice.tablet);
 
   const getTransactionsList = async () => {
     setLoading(true);
@@ -71,11 +75,19 @@ const TransactionHistory = () => {
       ) : error ? (
         <FetchError />
       ) : transactions?.length ? (
-        <TransactionHistoryRender
-          transactions={transactions}
-          setChangeTransaction={setChangeTransaction}
-          deleteTransaction={deleteTransaction}
-        />
+        isTablet ? (
+          <TransactionHistoryRender
+            transactions={transactions}
+            setChangeTransaction={setChangeTransaction}
+            deleteTransaction={deleteTransaction}
+          />
+        ) : (
+          <TransactionHistoryRenderMobile
+            transactions={transactions}
+            setChangeTransaction={setChangeTransaction}
+            deleteTransaction={deleteTransaction}
+          />
+        )
       ) : (
         <NoTrasactions />
       )}

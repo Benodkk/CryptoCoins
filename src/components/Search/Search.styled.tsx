@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { devices } from "../../styles/deviceWidth";
 
 interface Props {
   active: boolean;
@@ -8,12 +9,12 @@ export const StyledSearchContainer = styled.div<Props>`
   position: absolute;
   display: flex;
   flex-direction: column;
-  width: 200%;
+  width: 100vw;
   background-color: ${(props) => props.theme.colors.background};
   align-self: flex-start;
   justify-self: flex-end;
   padding: 15px 0 10px;
-  left: -100%;
+  left: 0;
   color: white;
   box-shadow: ${(props) => props.theme.boxShadow.dark};
   transition: 0.5s;
@@ -21,6 +22,10 @@ export const StyledSearchContainer = styled.div<Props>`
   visibility: ${({ active }) => (active ? "visible" : "hidden")};
   transform: ${({ active }) =>
     active ? "translateY(-15px)" : "translateY(-130%)"};
+  @media ${devices.tablet} {
+    width: 200%;
+    left: -100%;
+  }
 `;
 
 export const StyledInputContainer = styled.div`

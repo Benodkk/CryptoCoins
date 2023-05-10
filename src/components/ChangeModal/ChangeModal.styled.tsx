@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { devices } from "../../styles/deviceWidth";
 
 export const StyledModalContainer = styled.div`
   position: fixed;
@@ -17,10 +18,16 @@ export const StyledModal = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${(props) => props.theme.colors.backgroundSecond};
-  min-width: 500px;
-  padding: 20px;
-  border-radius: 20px;
+  max-width: 100%;
+  padding: 10px;
+  border-radius: 10px;
   font-weight: 700;
+  @media ${devices.tablet} {
+    width: auto;
+    min-width: 500px;
+    padding: 20px;
+    border-radius: 20px;
+  }
 `;
 
 export const StyledModalHeadRow = styled.div`
@@ -32,12 +39,20 @@ export const StyledLogoRow = styled.div`
   align-self: center;
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 24px;
+  gap: 5px;
+  font-size: 20px;
   font-weight: 700;
-  margin: 10px 0 20px;
+  margin: 5px 0 10px;
   img {
-    width: 40px;
+    width: 35px;
+  }
+  @media ${devices.tablet} {
+    font-size: 24px;
+    gap: 10px;
+    margin: 10px 0 20px;
+    img {
+      width: 40px;
+    }
   }
 `;
 
@@ -59,16 +74,21 @@ export const StyledActionCol = styled.div`
 `;
 
 export const StyledInput = styled.input`
-  padding: 8px;
+  padding: 6px;
   border: none;
-  border-radius: 10px;
-  font-size: 16px;
+  border-radius: 5px;
+  font-size: 12px;
   font-family: Arial, Helvetica, sans-serif;
   &:focus {
     background-color: ${(props) => props.theme.colors.interaction};
   }
   :disabled {
     background-color: ${(props) => props.theme.colors.disabledInput};
+  }
+  @media ${devices.tablet} {
+    padding: 8px;
+    border-radius: 10px;
+    font-size: 16px;
   }
 `;
 
@@ -83,9 +103,10 @@ export const StyledButtonsCol = styled.div`
 export const StyledActionButton = styled.button`
   background-color: ${(props) => props.theme.colors.main};
   border: none;
-  width: 80px;
-  height: 40px;
-  border-radius: 8px;
+  width: 60px;
+  height: 30px;
+  border-radius: 6px;
+  font-size: 12px;
   cursor: pointer;
   font-weight: 600;
   transition: 0.2s;
@@ -95,5 +116,11 @@ export const StyledActionButton = styled.button`
   &:active {
     background-color: ${(props) => props.theme.colors.interaction};
     transform: scale(0.9);
+  }
+  @media ${devices.tablet} {
+    width: 80px;
+    height: 40px;
+    border-radius: 8px;
+    font-size: 14px;
   }
 `;

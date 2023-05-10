@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import { devices } from "../../styles/deviceWidth";
 
 export const StyledMainContainer = styled.div`
   display: flex;
@@ -8,8 +9,12 @@ export const StyledMainContainer = styled.div`
 `;
 
 export const StyledSectionName = styled.h2`
-  font-size: 40px;
-  padding: 30px 0;
+  font-size: 24px;
+  padding: 10px 0;
+  @media ${devices.desktop} {
+    font-size: 40px;
+    padding: 30px 0;
+  }
 `;
 
 // Welcome Page
@@ -33,14 +38,25 @@ export const StyledWelcomeSignContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  min-width: 1024px;
+  width: 100%;
+  padding: 0 5px;
+  @media ${devices.desktop} {
+    width: 1024px;
+    min-width: 1024px;
+  }
 `;
 
 export const StyledWelcomeSign = styled.h2`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 60px;
+  font-size: 24px;
+  @media ${devices.tablet} {
+    font-size: 48px;
+  }
+  @media ${devices.desktop} {
+    font-size: 60px;
+  }
 `;
 
 const bounce = keyframes`
@@ -55,8 +71,14 @@ const bounce = keyframes`
 }`;
 
 export const StyledCoinImg = styled.img`
-  width: 100px;
+  width: 40px;
   animation: ${bounce} 2s ease-in-out infinite;
+  @media ${devices.tablet} {
+    width: 80px;
+  }
+  @media ${devices.desktop} {
+    width: 100px;
+  }
 `;
 
 // Trading Coins
@@ -65,29 +87,50 @@ export const StyledTrandingCoinsSection = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 1024px;
+  width: 100%;
   min-height: 50vh;
+  @media ${devices.desktop} {
+    width: 1024px;
+  }
 `;
 
 export const StyledTrandingCoins = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  @media ${devices.desktop} {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr 1fr;
+  }
 `;
 
 export const StyledOneTrandingCoin = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
-  padding: 20px;
-  margin: 20px;
-  border: 3px solid white;
+  gap: 10px;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid white;
   border-radius: 10px;
   font-weight: 700;
+  font-size: 14px;
   cursor: pointer;
+  img {
+    width: 20px;
+  }
   &:hover {
     background-color: ${(props) => props.theme.colors.hoverDark};
+  }
+  @media ${devices.tablet} {
+    gap: 20px;
+    padding: 20px;
+    margin: 20px;
+    border: 3px solid white;
+    font-size: 2rem;
+    img {
+      width: 50px;
+    }
   }
 `;
 
@@ -103,17 +146,21 @@ export const StyledButton = styled.button`
   background-color: #ffffff;
   border: none;
   padding: 5px 10px;
-  margin-top: 20px;
+  margin-top: 10px;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
   transition: 0.2s;
-  font-size: 20px;
+  font-size: 14px;
   &:hover {
     background-color: ${(props) => props.theme.colors.interaction};
   }
   &:active {
     background-color: ${(props) => props.theme.colors.interaction};
     transform: scale(0.9);
+  }
+  @media ${devices.tablet} {
+    margin-top: 20px;
+    font-size: 20px;
   }
 `;

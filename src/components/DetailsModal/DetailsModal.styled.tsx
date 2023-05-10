@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { devices } from "../../styles/deviceWidth";
 
 export const StyledModalContainer = styled.div`
   position: fixed;
@@ -19,10 +20,16 @@ export const StyledModal = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${(props) => props.theme.colors.backgroundSecond};
-  min-width: 500px;
-  padding: 20px;
-  border-radius: 20px;
+  max-width: 100%;
+  padding: 10px;
+  border-radius: 10px;
   gap: 15px;
+  @media ${devices.tablet} {
+    width: auto;
+    min-width: 500px;
+    padding: 20px;
+    border-radius: 20px;
+  }
 `;
 
 export const StyledModalHeadRow = styled.div`
@@ -47,7 +54,10 @@ export const StyledCoinSymbol = styled.div`
 
 export const StyledRow = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 10px;
+  @media ${devices.tablet} {
+    gap: 20px;
+  }
 `;
 
 export const StyledPriceContainer = styled.div`
@@ -79,7 +89,7 @@ export const StyledTransactionButton = styled.button`
   border: none;
   padding: 5px 10px;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 12px;
   cursor: pointer;
   font-weight: 600;
   transition: 0.2s;
@@ -89,5 +99,8 @@ export const StyledTransactionButton = styled.button`
   &:active {
     background-color: ${(props) => props.theme.colors.interaction};
     transform: scale(0.9);
+  }
+  @media ${devices.tablet} {
+    font-size: 16px;
   }
 `;

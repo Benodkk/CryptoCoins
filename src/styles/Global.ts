@@ -8,8 +8,9 @@ export const GlobalStyle = createGlobalStyle`
     padding:0;
     box-sizing: border-box;
 }
+
 html{
-    font-size: 8px;
+    font-size: 7px;
       @media ${devices.tablet} {
     font-size: 10px;
   }
@@ -17,12 +18,12 @@ html{
 body{
     font-family: "Titillium Web", sans-serif;
     font-weight: 600;
-    /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
     font-size: 2rem;
     line-height: 1;
     background-color: rgb(0,6,68);
     color: rgb(255,255,255)
 }
+
 ol, ul {
     list-style: none outside none;
 }

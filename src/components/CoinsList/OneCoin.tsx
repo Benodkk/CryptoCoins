@@ -1,5 +1,6 @@
 import { CoinDetails } from "./interfaces";
 
+import { useMediaQuery } from "react-responsive";
 import {
   StyledChangeDiv,
   StyledImgWithName,
@@ -8,6 +9,7 @@ import {
   StyledToRightDiv,
   StyledTransactionButton,
 } from "./CoinsList.styled";
+import { reactDevice } from "../../styles/deviceWidth";
 
 interface Props {
   coin: CoinDetails;
@@ -21,7 +23,7 @@ const OneCoin = ({ coin, setShowDetails, setAddTransaction }: Props) => {
       <div>{coin.market_cap_rank}</div>
       <StyledImgWithName>
         <img src={coin.image} />
-        <div>{coin.name}</div>
+        {useMediaQuery(reactDevice.desktop) && <div>{coin.name}</div>}
         <StyledSymbol>{coin.symbol.toUpperCase()}</StyledSymbol>
       </StyledImgWithName>
       <StyledToRightDiv>
@@ -35,14 +37,16 @@ const OneCoin = ({ coin, setShowDetails, setAddTransaction }: Props) => {
       <StyledToRightDiv>
         ${coin.market_cap.toLocaleString("en-US")}
       </StyledToRightDiv>
-      <StyledTransactionButton
-        onClick={(e) => {
-          e.stopPropagation();
-          setAddTransaction(coin.id);
-        }}
-      >
-        Add transaction
-      </StyledTransactionButton>
+      {useMediaQuery(reactDevice.desktop) && (
+        <StyledTransactionButton
+          onClick={(e) => {
+            e.stopPropagation();
+            setAddTransaction(coin.id);
+          }}
+        >
+          Add Transaction
+        </StyledTransactionButton>
+      )}
     </StyledOneCoin>
   );
 };

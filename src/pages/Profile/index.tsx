@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 import Overview from "./Overview";
-import TransactionHistory from "./TransactionHistory";
-import CoinsOverview from "./CoinsOverview";
+import TransactionHistory from "./TransactionHistory/TransactionHistory";
+import CoinsOverview from "./CoinsOverview/CoinsOverview";
 import Tabs from "./Tabs";
 
 import { PortfolioValue } from "./interfaces";

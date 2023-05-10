@@ -13,6 +13,8 @@ import {
   StyledMenu,
   StyledNavigate,
 } from "./Header.styled";
+import { useMediaQuery } from "react-responsive";
+import { reactDevice } from "../../styles/deviceWidth";
 
 const Header = () => {
   const location = useLocation();
@@ -50,7 +52,9 @@ const Header = () => {
   }, [auth]);
 
   return (
-    <StyledHeaderContainer scroll={scroll > 100}>
+    <StyledHeaderContainer
+      scroll={useMediaQuery(reactDevice.desktop) ? scroll > 100 : scroll > 40}
+    >
       <StyledHeader>
         <StyledLogo onClick={() => changeSite("/")}>CryptoCoins</StyledLogo>
         <StyledMenu>

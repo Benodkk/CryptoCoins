@@ -55,7 +55,7 @@ const DetailsModal = ({ coinId, setShowDetails, setAddTransaction }: Props) => {
       ) : (
         <StyledModal>
           <StyledModalHeadRow>
-            <div>Change transaction</div>
+            <div>Coin</div>
             <CloseButton onClick={() => setAddTransaction(null)} />
           </StyledModalHeadRow>
           <FetchError />

@@ -2,15 +2,19 @@ import { useState, useEffect } from "react";
 
 import { BeatLoader } from "react-spinners";
 
-import { db, auth } from "../../config/firebase";
+import { db, auth } from "../../../config/firebase";
 import { collection, getDocs } from "firebase/firestore";
 
-import { CoinsSummary, Transaction, PortfolioValue } from "./interfaces";
+import { CoinsSummary, Transaction, PortfolioValue } from "../interfaces";
 
-import NoTrasactions from "./NoTrasactions";
+import NoTrasactions from "../NoTrasactions";
 import CoinsOverviewRender from "./CoinsOverviewRender";
+import CoinsOverviewRenderMobile from "./CoinsOverviewRenderMobile";
+import FetchError from "../../../components/FetchError";
 
-import { StyledCoinsOverview } from "./Profile.styled";
+import { StyledCoinsOverview } from "./CoinsOvertview.styled";
+import { useMediaQuery } from "react-responsive";
+import { reactDevice } from "../../../styles/deviceWidth";
 
 interface SortedCoins {
   [x: string]: {
@@ -28,11 +32,14 @@ interface Props {
 const CoinsOverview = ({ setPortfolioValue }: Props) => {
   const [coinsSummary, setCoinsSummary] = useState<CoinsSummary[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
+  const isTablet = useMediaQuery(reactDevice.tablet);
   const user = auth.currentUser?.uid;
 
   const getCoinsList = async () => {
     setLoading(true);
+    setError(false);
     let coins: CoinsSummary[] = [];
 
     const transactionsColletionRef = collection(
@@ -130,9 +137,11 @@ const CoinsOverview = ({ setPortfolioValue }: Props) => {
         profit: profit,
         coinsValue: currentPortfolioValue,
       });
+
       setCoinsSummary(coins);
     } catch (err) {
       console.error(err);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -146,8 +155,14 @@ const CoinsOverview = ({ setPortfolioValue }: Props) => {
     <StyledCoinsOverview>
       {loading ? (
         <BeatLoader color="white" />
+      ) : error ? (
+        <FetchError />
       ) : coinsSummary.length ? (
-        <CoinsOverviewRender coinsSummary={coinsSummary} />
+        isTablet ? (
+          <CoinsOverviewRender coinsSummary={coinsSummary} />
+        ) : (
+          <CoinsOverviewRenderMobile coinsSummary={coinsSummary} />
+        )
       ) : (
         <NoTrasactions />
       )}

@@ -12,6 +12,8 @@ import {
   StyledMarketList,
   StyledToRightDiv,
 } from "./CoinsList.styled";
+import { useMediaQuery } from "react-responsive";
+import { reactDevice } from "../../styles/deviceWidth";
 
 interface Props {
   coins: CoinDetails[];
@@ -28,7 +30,10 @@ const CoinsList = ({ coins }: Props) => {
           <div>#</div>
           <StyledImgWithName>Coin</StyledImgWithName>
           <StyledToRightDiv>Price</StyledToRightDiv>
-          <div>24h change</div>
+          <div>
+            24h
+            {useMediaQuery(reactDevice.desktop) && <> change</>}
+          </div>
           <StyledToRightDiv>Market Cap</StyledToRightDiv>
         </StyledListHeader>
         {coins.map((coin) => {

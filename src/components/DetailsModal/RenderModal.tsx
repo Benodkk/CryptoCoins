@@ -82,9 +82,8 @@ const RenderModal = ({ coin, setShowDetails, setAddTransaction }: Props) => {
         </StyledPriceContainer>
       </StyledRow>
       <StyledRow>
-        <StyledLabel>ATH:</StyledLabel>
         <div>
-          <StyledLabel>Price: </StyledLabel>
+          <StyledLabel>ATH: </StyledLabel>
           {useRoundNr(coin.market_data.ath.usd)}$
         </div>
         <div>
