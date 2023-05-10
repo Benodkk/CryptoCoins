@@ -69,8 +69,13 @@ export const StyledActionCol = styled.div`
   align-items: center;
   img {
     cursor: pointer;
-    height: 80%;
     padding-left: 5px;
+    max-height: 24px;
+  }
+  @media ${devices.tablet} {
+    img {
+      max-height: 30px;
+    }
   }
 `;
 
