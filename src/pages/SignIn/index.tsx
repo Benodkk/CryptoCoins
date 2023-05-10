@@ -103,7 +103,11 @@ const SignIn = () => {
               </>
             )}
           </StyledInputOrSpinner>
-          <StyledSubmitForm type="submit" onClick={(e) => signIn(e)} />
+          <StyledSubmitForm
+            type="submit"
+            value="Submit"
+            onClick={(e) => signIn(e)}
+          />
           <div>Or login with</div>
           <StyledWithGoogle onClick={signInWithGoogle}>
             <img src={googleIcon} alt="google" />

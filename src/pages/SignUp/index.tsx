@@ -104,7 +104,11 @@ const SignUp = () => {
             )}
           </StyledInputOrSpinner>
 
-          <StyledSubmitForm type="submit" onClick={(e) => signUp(e)} />
+          <StyledSubmitForm
+            type="submit"
+            value="Submit"
+            onClick={(e) => signUp(e)}
+          />
         </StyledSignUp>
       </StyledSignUpForm>
     </StyledSignUpContainer>

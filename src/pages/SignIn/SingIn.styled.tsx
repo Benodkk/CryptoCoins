@@ -110,6 +110,7 @@ export const StyledInput = styled.input`
 export const StyledSubmitForm = styled.input`
   width: 100%;
   background-color: #ffffff;
+  color: black;
   border: none;
   height: 30px;
   border-radius: 6px;

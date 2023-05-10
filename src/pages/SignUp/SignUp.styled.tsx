@@ -99,6 +99,7 @@ export const StyledInput = styled.input`
     outline: none;
     background-color: ${(props) => props.theme.colors.interaction};
   }
+  -webkit-appearance: none;
   @media ${devices.tablet} {
     border-radius: 10px;
     font-size: 18px;
@@ -110,13 +111,15 @@ export const StyledInput = styled.input`
 export const StyledSubmitForm = styled.input`
   width: 100%;
   background-color: #ffffff;
+  color: black;
   border: none;
   height: 30px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   transition: 0.2s;
+  -webkit-appearance: none;
   box-shadow: ${(props) => props.theme.boxShadow.purple};
   &:hover {
     background-color: ${(props) => props.theme.colors.interaction};
