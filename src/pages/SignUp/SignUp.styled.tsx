@@ -116,7 +116,7 @@ export const StyledSubmitForm = styled.input`
   height: 30px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   transition: 0.2s;
   -webkit-appearance: none;

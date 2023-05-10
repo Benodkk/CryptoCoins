@@ -95,6 +95,7 @@ export const StyledInput = styled.input`
   height: 30px;
   font-family: Arial, Helvetica, sans-serif;
   box-shadow: ${(props) => props.theme.boxShadow.purple};
+  -webkit-appearance: none;
   &:focus {
     outline: none;
     background-color: ${(props) => props.theme.colors.interaction};
@@ -119,6 +120,7 @@ export const StyledSubmitForm = styled.input`
   font-weight: 600;
   transition: 0.2s;
   box-shadow: ${(props) => props.theme.boxShadow.purple};
+  -webkit-appearance: none;
   &:hover {
     background-color: ${(props) => props.theme.colors.interaction};
   }
