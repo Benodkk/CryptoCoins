@@ -111,7 +111,9 @@ const RenderModal = ({ transaction, setChangeTransaction, coin }: Props) => {
           <StyledInput
             disabled={disable === "amount"}
             value={
-              disable === "amount" ? Number(amount.toPrecision(5)) : amount
+              disable === "amount"
+                ? Number(amount.toPrecision(5))
+                : amount || ""
             }
             type="number"
             onChange={(e) => priceChange(Number(e.target.value), "amount")}
@@ -125,7 +127,9 @@ const RenderModal = ({ transaction, setChangeTransaction, coin }: Props) => {
           <label>Price($):</label>
           <StyledInput
             disabled={disable === "price"}
-            value={disable === "price" ? Number(price.toPrecision(5)) : price}
+            value={
+              disable === "price" ? Number(price.toPrecision(5)) : price || ""
+            }
             type="number"
             onChange={(e) => priceChange(Number(e.target.value), "price")}
           />
@@ -138,7 +142,7 @@ const RenderModal = ({ transaction, setChangeTransaction, coin }: Props) => {
           <label>In total($):</label>
           <StyledInput
             disabled={disable === "inTotal"}
-            value={Number(inTotal.toFixed(2))}
+            value={Number(inTotal.toFixed(2)) || ""}
             type="number"
             onChange={(e) => priceChange(Number(e.target.value), "inTotal")}
           />

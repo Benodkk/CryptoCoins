@@ -138,7 +138,7 @@ export const StyledTabButton = styled.button<StyledTabButtonProps>`
   }
   @media ${devices.desktop} {
     &:hover {
-      padding: 13px 10px 7px;
+      transform: translateY(2px);
       text-shadow: 0.4px 0.4px 1px white;
     }
   }

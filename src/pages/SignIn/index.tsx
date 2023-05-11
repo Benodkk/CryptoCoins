@@ -23,9 +23,10 @@ import {
 } from "./SingIn.styled";
 
 const errorMessage = {
-  emptyEmail: "Enter E-mail",
-  emptyPassword: "Enter Password",
-  wrong: "Wrong E-mail or Password",
+  emptyEmail: "Enter E-mail.",
+  emptyPassword: "Enter Password.",
+  wrong: "Wrong E-mail or Password.",
+  google: "Something went wrong. Try again.",
 };
 
 const SignIn = () => {
@@ -68,8 +69,12 @@ const SignIn = () => {
       await signInWithPopup(auth, googleProvider);
     } catch (err) {
       console.error(err);
+      setError(errorMessage.google);
+      setShowError(true);
     } finally {
-      if (auth) {
+      console.log("anna");
+      if (auth.currentUser) {
+        console.log("ann");
         navigate("/profile");
       }
     }

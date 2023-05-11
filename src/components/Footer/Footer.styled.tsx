@@ -10,7 +10,8 @@ export const StyledFooterContainer = styled.footer`
 
 export const StyledFooterLink = styled.div`
   font-weight: 700;
-  a:-webkit-any-link {
+  a:-webkit-any-link,
+  a {
     transition: color 0.3s;
     color: white;
     text-decoration: none;

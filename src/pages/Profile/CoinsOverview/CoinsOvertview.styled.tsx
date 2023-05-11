@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { devices } from "../../../styles/deviceWidth";
 
-export const StyledCoinsOverview = styled.div`
+export const StyledCoinsOverview = styled.section`
   margin: 20px 0px;
   padding: 0 5px;
   display: flex;

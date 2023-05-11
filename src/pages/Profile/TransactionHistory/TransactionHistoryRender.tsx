@@ -48,7 +48,9 @@ const TransactionHistoryRender = ({
                 <td>{transaction.name}</td>
                 <td>${useRoundNr(transaction.price)}</td>
                 <td>{useRoundNr(transaction.amount)}</td>
-                <td>${useRoundNr(transaction.amount * transaction.price)}</td>
+                <td>
+                  ${Number(transaction.amount * transaction.price).toFixed(2)}
+                </td>
                 <StyledChangeTd buy={transaction.type === "buy"}>
                   {transaction.type}
                 </StyledChangeTd>

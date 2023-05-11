@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { devices } from "../../styles/deviceWidth";
 
 export const StyledModalContainer = styled.div`
@@ -16,6 +16,14 @@ export const StyledModalContainer = styled.div`
 
 // Render modal
 
+const show = keyframes`
+0%{
+  opacity: 0;
+}
+100% {
+  opacity: 1;
+}`;
+
 export const StyledModal = styled.div`
   display: flex;
   flex-direction: column;
@@ -24,6 +32,7 @@ export const StyledModal = styled.div`
   padding: 10px;
   border-radius: 10px;
   font-weight: 700;
+  animation: ${show} 1s;
   @media ${devices.tablet} {
     width: auto;
     min-width: 500px;
@@ -60,6 +69,12 @@ export const StyledLogoRow = styled.div`
 export const StyledActionRow = styled.div`
   display: flex;
   justify-content: space-between;
+  min-height: 140px;
+  min-width: 353px;
+  @media ${devices.tablet} {
+    min-height: 172px;
+    min-width: 470px;
+  }
 `;
 
 export const StyledActionCol = styled.div`
@@ -116,8 +131,8 @@ export const StyledActionButton = styled.button`
   cursor: pointer;
   font-weight: 600;
   transition: 0.2s;
-  &:hover {
-    background-color: ${(props) => props.theme.colors.interaction};
+  :disabled {
+    color: black;
   }
   &:active {
     background-color: ${(props) => props.theme.colors.interaction};
@@ -128,5 +143,8 @@ export const StyledActionButton = styled.button`
     height: 40px;
     border-radius: 8px;
     font-size: 14px;
+    &:hover {
+      background-color: ${(props) => props.theme.colors.interaction};
+    }
   }
 `;

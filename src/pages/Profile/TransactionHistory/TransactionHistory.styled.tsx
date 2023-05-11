@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { devices } from "../../../styles/deviceWidth";
 
-export const StyledTransactionHistory = styled.div`
+export const StyledTransactionHistory = styled.section`
   margin: 20px 0px 0;
   padding: 0 5px;
   display: flex;

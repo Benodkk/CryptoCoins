@@ -5,7 +5,7 @@ const theme = {
     backgroundTransparent: "rgba(4, 7, 46, 0.8)",
     main: "rgb(255,255,255)",
     second: "rgb(6,237,245)",
-    interaction: "rgb(241, 238, 255)",
+    interaction: "rgb(222, 215, 255)",
     hoverDark: "rgb(4, 7, 46)",
     disabledInput: "rgb(201, 201, 201)",
   },

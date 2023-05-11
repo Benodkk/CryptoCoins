@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { devices } from "../../styles/deviceWidth";
 
 export const StyledModalContainer = styled.div`
@@ -16,6 +16,14 @@ export const StyledModalContainer = styled.div`
 
 // RenderModal
 
+const show = keyframes`
+0%{
+  opacity: 0;
+}
+100% {
+  opacity: 1;
+}`;
+
 export const StyledModal = styled.div`
   display: flex;
   flex-direction: column;
@@ -24,6 +32,7 @@ export const StyledModal = styled.div`
   padding: 10px;
   border-radius: 10px;
   gap: 15px;
+  animation: ${show} 1s;
   @media ${devices.tablet} {
     width: auto;
     min-width: 500px;

@@ -24,11 +24,11 @@ const CoinsOverviewRender = ({ coinsSummary }: Props) => {
         <thead>
           <StyledCoinsTopHeader>
             <th>Coin</th>
-            <th>Current value</th>
+            <th>Current price ($)</th>
             <th>Transactions</th>
-            <th>Average price</th>
-            <th>All transacions value</th>
-            <th>Profit</th>
+            <th>Average price ($)</th>
+            <th>All transacions value ($)</th>
+            <th>Profit ($)</th>
             <th>Coins remaining</th>
           </StyledCoinsTopHeader>
           <StyledCoinsBottomHeader>
@@ -42,7 +42,7 @@ const CoinsOverviewRender = ({ coinsSummary }: Props) => {
             <th>sell</th>
             <th></th>
             <th>Amount</th>
-            <th>Total value</th>
+            <th>Total value ($)</th>
           </StyledCoinsBottomHeader>
         </thead>
         <tbody>
