@@ -75,7 +75,7 @@ const CoinsOverviewRender = ({ coinsSummary }: Props) => {
                 </td>
                 <td>
                   {coin.profit
-                    ? Number(coin.profit.toFixed(2)).toLocaleString()
+                    ? Number(coin.profit.toFixed(2)).toLocaleString("en-US")
                     : "-"}
                 </td>
                 <td onClick={() => console.log((1).toPrecision(5))}>

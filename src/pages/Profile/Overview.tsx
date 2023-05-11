@@ -66,13 +66,19 @@ const Overview = ({ portfolioValue }: OverviewProps) => {
             <StyledOneStatContainer>
               <div>Transactions profit</div>
               <StyledOneStatValue positive={portfolioValue.profit > 0}>
-                {Number(portfolioValue.profit.toFixed(2)).toLocaleString()}$
+                {Number(portfolioValue.profit.toFixed(2)).toLocaleString(
+                  "en-US"
+                )}
+                $
               </StyledOneStatValue>
             </StyledOneStatContainer>
             <StyledOneStatContainer>
               <div>Portfolio value</div>
               <StyledOneStatValue positive={portfolioValue.coinsValue > 0}>
-                {Number(portfolioValue.coinsValue.toFixed(2)).toLocaleString()}$
+                {Number(portfolioValue.coinsValue.toFixed(2)).toLocaleString(
+                  "en-US"
+                )}
+                $
               </StyledOneStatValue>
             </StyledOneStatContainer>
             <StyledOneStatContainer>
@@ -82,7 +88,7 @@ const Overview = ({ portfolioValue }: OverviewProps) => {
               >
                 {Number(
                   (portfolioValue.profit + portfolioValue.coinsValue).toFixed(2)
-                ).toLocaleString()}
+                ).toLocaleString("en-US")}
                 $
               </StyledOneStatValue>
             </StyledOneStatContainer>

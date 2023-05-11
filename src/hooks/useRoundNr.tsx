@@ -1,11 +1,10 @@
 function useRoundNr(number: number) {
   let returnNumber: string;
-  console.log(number);
   let absNumber = Math.abs(number);
   if (absNumber >= 1000 && absNumber < 10000) {
-    returnNumber = Number(absNumber.toFixed(2)).toLocaleString();
+    returnNumber = Number(absNumber.toFixed(2)).toLocaleString("es-US");
   } else if (absNumber >= 10000) {
-    returnNumber = Number(absNumber.toFixed(0)).toLocaleString();
+    returnNumber = Number(absNumber.toFixed(0)).toLocaleString("es-US");
   } else {
     returnNumber = absNumber.toPrecision(5);
     while (

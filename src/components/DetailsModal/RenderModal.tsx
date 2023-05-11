@@ -46,7 +46,7 @@ const RenderModal = ({ coin, setShowDetails, setAddTransaction }: Props) => {
         </div>
         <div>
           <StyledLabel>Market Cap: </StyledLabel>
-          {coin.market_data.market_cap.usd.toLocaleString()}$
+          {coin.market_data.market_cap.usd.toLocaleString("en-US")}$
         </div>
       </StyledRow>
       <StyledRow>
